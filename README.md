@@ -90,6 +90,8 @@ python scripts/run_all.py
 
 `validate_cases.py` requires at least 50 cases, unique ids, and full defect-family coverage. CI (`.github/workflows/ci.yml`) runs the same commands.
 
+Recorded corpus failures (mixed verdicts, required defect families, flagship length): `docs/failures_and_corrections.md`. Open work: `ROADMAP.md` and GitHub Issues. Process: `docs/lab_process.md`.
+
 ## Citation
 
 See `CITATION.cff`.
