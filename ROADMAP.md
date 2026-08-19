@@ -16,10 +16,8 @@ Details: `docs/failures_and_corrections.md` and `docs/defect_taxonomy.md`.
 
 ## Open (issues)
 
-1. Cases are constructed failure modes, not a sample of production model traffic. Expanding the corpus is useful only when a new defect family or a harder identification error is named.
-2. Rubric profiles are not a single quality score. Automated aggregation beyond the documented profile would be a methodology change and needs an issue first.
-3. Inter-rater reliability across human reviewers is not measured here.
-4. Linking a case to a companion laboratory (econometrics, statistics, optimization) by id is informal; a machine-readable cross-walk is not implemented.
+1. Cases remain constructed failure modes, not production traffic.
+2. Cohen's kappa is implemented as arithmetic on label vectors, not as a second-rater study of the YAML corpus.
 
 ## Explicitly not in scope
 

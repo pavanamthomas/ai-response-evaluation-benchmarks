@@ -10,6 +10,7 @@ from aibench.rubric import (
     expected_severity,
     heuristic_checks,
     structured_profile,
+    verdict_from_profile,
 )
 
 
@@ -43,3 +44,14 @@ def test_structured_profile_is_not_a_single_verdict() -> None:
     assert profile["mean"] > 2
     assert "causal validity" in profile["failing_dimensions"]
     assert "not a single score" in profile["note"]
+    assert verdict_from_profile(profile) == "fail"
+
+
+def test_cohens_kappa_on_known_tables() -> None:
+    from aibench.agreement import cohens_kappa
+
+    a = ["PASS", "PASS", "FAIL", "FAIL"]
+    b = ["PASS", "PASS", "FAIL", "FAIL"]
+    assert abs(cohens_kappa(a, b) - 1.0) < 1e-12
+    b2 = ["FAIL", "FAIL", "PASS", "PASS"]
+    assert cohens_kappa(a, b2) < 0.0
