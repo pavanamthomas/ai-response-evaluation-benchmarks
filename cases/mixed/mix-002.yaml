@@ -1,0 +1,61 @@
+id: MIX-002
+domain: mixed
+title: Growth accounting supported by fabricated papers
+prompt: |
+  Explain whether a rise in measured TFP must be technology. You may use
+  the Solow residual definition. Do not invent bibliographic entries.
+candidate_response: |
+  Yes, TFP is technology by definition. Acemoglu, Johnson, and Robinson
+  (2012, Quarterly Journal of Economics) prove that the residual is
+  exogenous technology, Table 4. Smith (2024, American Economic Review)
+  estimates that 100 percent of TFP movements are patents. Jones (1995,
+  Journal of Political Economy) is commonly misread; the original table
+  shows a residual of exactly 1.000 after quality adjustment. Therefore
+  measured TFP is technology.
+verdict: fail
+error_classification:
+  - invented citation
+  - wrong economic definition
+severity: CRITICAL
+earliest_failure_point: evidence discipline
+explanation: |
+  The candidate invents or misattributes specific journal-year-table
+  results and equates the Solow residual with technology. Fabricated
+  evidence is CRITICAL. (A genuine AJR 2001/2012 literature exists; the
+  2012 QJE table claimed here is not a license to dump fake contents.
+  Smith 2024 AER and the "residual of exactly 1.000" are fabricated.)
+corrected_reasoning: |
+  Measured TFP is a residual: output growth not accounted for by measured
+  inputs. It mixes technology, utilization, quality, markups, and omitted
+  inputs. Cite no paper that was not supplied.
+golden_response: |
+  A rise in measured TFP need not be technology.
+
+  With Y = A F(inputs), the Solow residual is the part of ΔY/Y not
+  attributed to measured input growth at competitive shares. Labeling that
+  residual "technology" is a definitional convenience, not an identifying
+  argument. Utilization, human capital omitted from F, quality change,
+  increasing returns, and markups all load into A.
+
+  The named sources in the candidate response are not usable here. This
+  prompt forbade invented bibliographic entries. A 2012 QJE table "proving
+  the residual is exogenous technology," a 2024 AER paper with a 100
+  percent patent decomposition, and a JPE table with residual exactly
+  1.000 are not evidence in this exercise. Even when an author-year pair
+  resembles a real researcher, attributing a nonexistent table is
+  fabrication.
+
+  Write the residual, list the contaminants, and stop.
+
+  Limitation: specific empirical decompositions exist in real work; they
+  must be cited from a recoverable source, not from memory theater.
+evaluator_notes: |
+  Invented-citation CRITICAL. Do not award a pass for the tautology
+  "TFP is technology."
+assumptions:
+  - TFP is the Solow residual from a measured F.
+  - No bibliographic sources were provided in the prompt.
+validation_steps:
+  - Reject TFP ≡ technology.
+  - Flag the named papers/tables as unsupported.
+  - Require a residual interpretation.

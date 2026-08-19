@@ -1,0 +1,65 @@
+id: ECON-006
+domain: economics
+title: Unanimous fiscal multiplier of 2.5
+prompt: |
+  Write a short literature paragraph on the government-purchases multiplier
+  in advanced economies during recessions, for a finance-ministry background
+  note. You may describe the range of estimates and why they differ. Do not
+  invent specific papers.
+candidate_response: |
+  The literature unanimously finds that the government-purchases multiplier is
+  2.5 in recessions. Every identified VAR and every narrative panel after 2008
+  converges on this number, so the ministry can treat 2.5 as a constant of
+  nature. Multipliers below one appear only in unpublished work. Because the
+  consensus is unanimous, uncertainty can be ignored in the budget scoring
+  rule: one euro of purchases raises GDP by 2.5 euros whenever output is
+  below trend.
+verdict: fail
+error_classification:
+  - unsupported empirical claim
+severity: MAJOR
+earliest_failure_point: evidence discipline
+explanation: |
+  The candidate asserts a unanimous quantitative consensus and a single number
+  2.5 that the prompt did not supply and that the literature does not share.
+  That is an unsupported empirical claim: it changes the ministry's scoring
+  rule. It is MAJOR rather than CRITICAL because no specific fake paper is
+  named; the fabrication is of consensus and magnitude.
+corrected_reasoning: |
+  Report that published multipliers for government purchases vary with the
+  identification scheme, the slack measure, monetary offset, and openness.
+  Typical ranges in surveys span well below one to above two. Do not score a
+  budget with a fake constant 2.5, and do not call the literature unanimous.
+golden_response: |
+  There is no unanimous government-purchases multiplier of 2.5, and a ministry
+  note should not invent one.
+
+  What can be said without fabricating a literature: estimates of dY/dG depend
+  on how G is identified (military news, narrative spending shocks, SVAR
+  timing restrictions, local projections with fiscal instruments), on whether
+  monetary policy offsets the shock, on openness and leakages, and on whether
+  the sample is a slack episode. Surveying that variation yields a **range**,
+  often including values below one and values above one, not a single constant.
+  Recessions can raise multipliers if resources are idle and if the central
+  bank does not raise the policy rate one-for-one, but that mechanism is a
+  hypothesis to be stated, not a license to pick 2.5.
+
+  For budget scoring, carry a range and an explicit monetary-offset
+  assumption. Treat "unanimous" and "constant of nature" as disqualifying
+  language. If a point estimate is required administratively, label it as a
+  scenario, not as a fact about all identified VARs after 2008.
+
+  Limitation: this paragraph is deliberately unsourced, per the prompt's
+  instruction not to invent papers. A real background note would cite
+  recoverable studies rather than a fake consensus number.
+evaluator_notes: |
+  The prompt forbade invented papers; the candidate invented a consensus
+  instead. Score evidence discipline at 0. Do not award partial credit for
+  mentioning VARs if the number 2.5 is treated as a law.
+assumptions:
+  - No numerical multiplier is provided in the prompt.
+  - Advanced-economy recession multipliers are heterogeneous in the literature.
+validation_steps:
+  - Check that 2.5 is not asserted as a fact.
+  - Check that "unanimous" is rejected.
+  - Confirm scoring advice carries a range or a labeled scenario.

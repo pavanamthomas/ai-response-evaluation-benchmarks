@@ -1,0 +1,49 @@
+id: MATH-004
+domain: mathematics
+title: Interior FOC for linear utility on a budget simplex
+prompt: |
+  Maximize u = 3x + y on p_x x + p_y y = m, x ≥ 0, y ≥ 0, with p_x = 1,
+  p_y = 1, m = 10. A solution reports x = y = 5 from "set MRS = price
+  ratio," with MRS computed as if utility were Cobb-Douglas.
+candidate_response: |
+  MRS = MUx/MUy = 3/1 = 3. Set MRS equal to px/py = 1, which cannot hold,
+  so I ignore the contradiction and split the budget equally because that
+  is the usual interior solution: x = y = 5. Complementary slackness is
+  for inequalities, and the budget is an equality, so there is no boundary
+  to check.
+verdict: fail
+error_classification:
+  - boundary-condition omission
+severity: MAJOR
+earliest_failure_point: mathematical correctness
+explanation: |
+  Linear utility with MRS constantly 3 > 1 = px/py implies a corner: spend
+  everything on x. The candidate forces an interior split and explicitly
+  skips the boundary. That changes the bundle from (10, 0) to (5, 5).
+corrected_reasoning: |
+  For u = 3x + y, bang-per-buck of x is 3/1, of y is 1/1. Buy only x:
+  (x, y) = (10, 0). Check u(10, 0) = 30 > u(5, 5) = 20 > u(0, 10) = 10.
+golden_response: |
+  Preferences are linear, so indifference curves are straight lines with
+  slope −3. The budget has slope −1. The consumer spends only on the good
+  with higher marginal utility per price: 3/p_x = 3 > 1 = 1/p_y, so
+  (x*, y*) = (m/p_x, 0) = (10, 0).
+
+  Setting MRS = px/py cannot hold anywhere: MRS is constantly 3, not 1.
+  There is no interior tangency. Nonnegativity constraints bind for y, and
+  complementary slackness is exactly the tool for that corner. Equal splits
+  are the Cobb-Douglas habit, not a FOC for this u.
+
+  Verify: u(10, 0) = 30, u(5, 5) = 20. The reported interior point is
+  feasible and strictly worse.
+
+  Limitation: if prices were p_x = 4, p_y = 1, the corner would switch to
+  y; if 3/p_x = 1/p_y the whole budget segment would be optimal.
+evaluator_notes: |
+  Boundary omission, not infeasibility. (5, 5) meets the budget.
+assumptions:
+  - Linear utility; equality budget; nonnegativity.
+validation_steps:
+  - Compare bang-per-buck.
+  - Report (10, 0).
+  - Reject interior equal split.

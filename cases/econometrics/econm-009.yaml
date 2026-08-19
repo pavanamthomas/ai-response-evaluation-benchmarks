@@ -1,0 +1,64 @@
+id: ECONM-009
+domain: econometrics
+title: Matching on observables as eliminating training-program confounding
+prompt: |
+  A job-training program is voluntary. After matching treated workers to
+  untreated workers on age, sex, prior-year earnings, and industry, the
+  difference in next-year earnings is +1,200 dollars. The analyst writes:
+  "Matching eliminates confounding, so +1,200 is the causal effect, as in
+  an RCT." Evaluate.
+candidate_response: |
+  Matching on a rich set of observables is equivalent to randomization.
+  Unconfoundedness is a theorem once the propensity score is balanced on
+  age, sex, earnings, and industry. Selection on unobservables cannot exist
+  after matching because matched residuals are orthogonal. +1,200 is ATE.
+verdict: fail
+error_classification:
+  - OVB
+severity: MAJOR
+earliest_failure_point: causal validity
+explanation: |
+  Matching on a short covariate list does not reproduce an RCT.
+  Unconfoundedness is an assumption, not a theorem, and motivation, health,
+  and remaining earnings histories are classic omitted variables in
+  training evaluations. The candidate's OVB denial changes the conclusion
+  from "associational matched gap" to "causal ATE."
+corrected_reasoning: |
+  Read +1,200 as a matched difference in means, i.e. a selection-on-
+  observables estimate under a strong and untested CIA. It is not ATE
+  without that assumption, and it is typically closer to ATT for the
+  treated support than to ATE for everyone.
+golden_response: |
+  Matching does not eliminate confounding by construction, and it is not
+  equivalent to an RCT.
+
+  An RCT identifies treatment effects because assignment is independent of
+  potential outcomes (possibly conditional on strata used in randomization).
+  Matching identifies ATT or ATE only under conditional independence: after
+  controlling for X, treatment is as good as random. Age, sex, one year of
+  earnings, and industry are a thin X for voluntary training. People who
+  enroll often differ in motivation, health, unemployment duration, and
+  longer earnings paths (Ashenfelter-style dips). Those omitted factors
+  remain in the matched residual and can bias +1,200 in either direction.
+
+  Balance on the included X is necessary for the CIA story, not sufficient
+  for it. Orthogonality of matching residuals to the included X is
+  mechanical; it does not imply orthogonality to unobserved confounders.
+
+  I would report a matched earnings gap of 1,200 dollars under an explicit
+  selection-on-observables assumption, discuss support (who among the
+  untreated looks like the treated), and not label the number ATE or RCT-
+  equivalent. A design with quasi-random slots or a cutoff would be needed
+  to drop that assumption.
+
+  Limitation: even under CIA, ATT for participants need not equal ATE for
+  a mandatory program.
+evaluator_notes: |
+  Companion to ECON-003 (OLS OVB). Here the trap is "matching = experiment."
+assumptions:
+  - Treatment is voluntary; X is the listed short vector.
+  - Unobserved determinants of enrollment may affect later earnings.
+validation_steps:
+  - Reject RCT equivalence.
+  - Name at least one omitted confounder class.
+  - Distinguish ATT/CIA from ATE.

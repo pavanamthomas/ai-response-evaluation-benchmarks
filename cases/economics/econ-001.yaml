@@ -1,0 +1,59 @@
+id: ECON-001
+domain: economics
+title: GDP as a sum of firm revenues
+prompt: |
+  A ministry table lists every registered firm's annual sales. A commentator
+  says that adding these sales "is GDP, because GDP is everything the economy
+  produces." Explain, for a two-firm economy, whether that sum is GDP and what
+  object it actually measures. Firm A sells steel worth 40 to Firm B and 10 to
+  households. Firm B sells cars worth 70 to households, using A's steel as its
+  only intermediate input. There is no government, inventories, or trade.
+candidate_response: |
+  GDP is the value of everything produced, so it is the sum of all firm
+  revenues. Here that sum is 40 + 10 + 70 = 120. The 40 of steel is production
+  and the 70 of cars is production, so omitting the 40 would undercount the
+  steel industry. National accounts that "net out" intermediates are an
+  accounting convention, not the economic definition of output.
+verdict: fail
+error_classification:
+  - wrong economic definition
+severity: MAJOR
+earliest_failure_point: conceptual correctness
+explanation: |
+  The candidate uses the wrong object. GDP is value added (equivalently, final
+  expenditure), not the sum of gross output. Adding 120 double-counts the steel
+  embodied in cars. The error is definitional and changes the numerical answer
+  from 80 to 120.
+corrected_reasoning: |
+  Compute GDP two ways. Expenditure on final goods: household steel 10 plus
+  cars 70 equals 80. Value added: Firm A adds 50; Firm B adds 70 - 40 = 30;
+  sum is 80. Gross output 120 is not GDP.
+golden_response: |
+  The sum of firm sales is gross output, not GDP. GDP measures the market value
+  of final goods and services, equivalently the sum of value added.
+
+  In the two-firm example, households buy steel worth 10 and cars worth 70.
+  Those are the only final sales, so expenditure-side GDP is 80. Firm A's value
+  added is 50 (it has no intermediates in the prompt). Firm B's value added is
+  70 minus the 40 of steel it uses, hence 30. Production-side GDP is 50 + 30 = 80.
+
+  Adding 40 + 10 + 70 = 120 counts the same steel twice: once as A's sales and
+  again as part of the car. Netting intermediates is not an optional convention;
+  it is what prevents that double count. If the commentator needs a sales
+  concept, call it gross output and do not label it GDP.
+
+  Limitation: the example shuts down inventories, government, and net exports.
+  Those SNA components would be added to final expenditure, still without
+  summing all invoices.
+evaluator_notes: |
+  Do not pass a candidate who says 120 "because steel is produced too." A brief
+  identity (GDP = C here = 80) is enough. Inventing a third firm or a citation
+  is unnecessary.
+assumptions:
+  - Closed economy, no government, no inventory investment.
+  - All output is marketed at the listed values.
+  - Firm B's only intermediate is A's steel.
+validation_steps:
+  - Recompute expenditure GDP as final sales only (10 + 70).
+  - Recompute value added (50 + 30) and confirm equality.
+  - Reject any answer that reports 120 as GDP.

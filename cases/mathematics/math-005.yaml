@@ -1,0 +1,61 @@
+id: MATH-005
+domain: mathematics
+title: Interchanging limit and integral when domination fails
+prompt: |
+  Let f_n(x) = n^2 x (1 − x)^n on [0, 1]. A note claims
+  lim_{n→∞} ∫_0^1 f_n(x) dx = ∫_0^1 lim_{n→∞} f_n(x) dx = 0, "because
+  f_n(x) → 0 for each x in [0, 1] and integration is continuous." Decide
+  whether the equality holds and compute both sides if they differ.
+candidate_response: |
+  Pointwise the integrand goes to 0: for x = 0 or 1, f_n = 0; for x in
+  (0, 1), (1 − x)^n decays exponentially while n^2 grows polynomially, so
+  f_n(x) → 0. Integration against a finite measure is a continuous linear
+  functional on bounded functions, so the limit of the integrals is 0.
+  Dominated convergence is optional when the pointwise limit is obvious.
+verdict: fail
+error_classification:
+  - technically correct but semantically wrong
+severity: MAJOR
+earliest_failure_point: mathematical correctness
+explanation: |
+  The pointwise limit is indeed 0, so that half of the note is technically
+  correct. Integration is not a continuous operation on this sequence:
+  ||f_n||_∞ → ∞, there is no integrable dominant, and the integrals tend
+  to 1 rather than 0. Applying a bounded-convergence slogan to an
+  unbounded spike sequence is semantically the wrong theorem and changes
+  the value.
+corrected_reasoning: |
+  Compute the integrals directly:
+  ∫_0^1 n^2 x (1 − x)^n dx = n^2 [1/(n+1) − 1/(n+2)] = n^2 / [(n+1)(n+2)]
+  → 1. The right-hand side of the claimed equality is 0. The interchange
+  is false.
+golden_response: |
+  The claimed equality is false: the pointwise limit is 0, but the
+  integrals tend to 1.
+
+  For each fixed x in [0, 1], f_n(x) → 0. That statement is correct. It
+  does not imply that the integrals converge to 0. The dominated
+  convergence theorem would require |f_n| ≤ g integrable, independent of
+  n. Here the mass of f_n concentrates near 0 with height growing like a
+  power of n, so no such g exists in L^1[0, 1]. Integration is continuous
+  on L^1, not on the set of all pointwise-null sequences of unbounded
+  functions.
+
+  Direct evaluation: substitute u = 1 − x,
+  ∫_0^1 n^2 x (1 − x)^n dx = n^2 ∫_0^1 (1 − u) u^n du
+  = n^2 (1/(n+1) − 1/(n+2)) = n^2 / [(n+1)(n+2)] → 1.
+
+  So lim ∫ f_n = 1 ≠ 0 = ∫ lim f_n. Always justify an interchange
+  (DCT, monotone convergence, or an explicit computation).
+
+  Limitation: on a subsequence of bounded L^1 norms the story could
+  differ; this sequence is the counter-example asked for.
+evaluator_notes: |
+  Reward computing n^2/[(n+1)(n+2)] → 1. The pointwise-limit remark
+  alone is not a pass.
+assumptions:
+  - Lebesgue or Riemann integration on [0, 1]; n → ∞ through integers.
+validation_steps:
+  - Confirm pointwise limit 0.
+  - Compute ∫ f_n = n^2/[(n+1)(n+2)] → 1.
+  - Reject the interchange.

@@ -1,0 +1,54 @@
+id: MIX-006
+domain: mixed
+title: Fiscal expansion under floating rates signed incorrectly
+prompt: |
+  In a standard Mundell–Fleming small-open-economy model with perfect
+  capital mobility, floating exchange rates, and unemployed resources, a
+  temporary government-purchases increase occurs. Sign the short-run
+  effects on output, the interest rate, and the exchange rate (home
+  currency price of foreign currency), and explain crowding out.
+candidate_response: |
+  Fiscal expansion raises output a lot, as in a closed Keynesian cross.
+  The interest rate is pinned by world r*, so there is no crowding out.
+  The exchange rate depreciates because higher Y sucks in imports. Labor
+  demand therefore rises unambiguously.
+verdict: fail
+error_classification:
+  - wrong sign
+severity: MAJOR
+earliest_failure_point: conceptual correctness
+explanation: |
+  Under floating rates and perfect capital mobility, IS-driven incipient
+  pressure on r* is relieved by appreciation (e falls if e is domestic
+  per foreign), which crowds out net exports and leaves Y unchanged in
+  the textbook IS-LM-BP case. The candidate has the wrong sign on the
+  exchange rate and the wrong output effect. MAJOR.
+corrected_reasoning: |
+  r remains at r*. The home currency appreciates, NX falls, and Y is
+  unchanged in the standard diagram. Crowding out is via the exchange
+  rate, not via r.
+golden_response: |
+  In Mundell–Fleming with floating e, perfect capital mobility, and a
+  horizontal BP at r*, a rise in G shifts IS out. Any incipient rise in
+  r would trigger capital inflows. Under floating rates those inflows
+  appreciate the home currency (e, domestic per foreign, falls). Net
+  exports fall until IS is back at the original Y, with r still at r*.
+  Short-run: ΔY = 0, Δr = 0, appreciation. Crowding out is complete and
+  operates through NX, not through a higher domestic interest rate.
+
+  The candidate's depreciation and large output gain mix in a fixed-rate
+  or closed-economy intuition. Under a peg, fiscal policy would instead
+  raise Y while the central bank prevents appreciation.
+
+  Limitation: imperfect capital mobility, a non-horizontal BP, or a
+  supply constraint would soften the knife-edge result; the prompt asked
+  for the standard case.
+evaluator_notes: |
+  Wrong-sign fixture for the exchange-rate channel. Require appreciation
+  and little or no Y gain in the textbook model.
+assumptions:
+  - Small open economy; floating e; perfect capital mobility; slack.
+validation_steps:
+  - Sign ΔY ≈ 0, Δr = 0, appreciation.
+  - Name NX crowding out.
+  - Reject depreciation-plus-large-Y.

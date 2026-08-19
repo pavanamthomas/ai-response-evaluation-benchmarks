@@ -1,0 +1,59 @@
+id: STAT-003
+domain: statistics
+title: Future default used as a credit-scoring feature
+prompt: |
+  A lender builds a default classifier on 2019–2022 originations. One
+  feature is "eventual recovery amount on this loan," observed when the
+  loan later defaults or is prepaid. Five-fold CV on the same 2019–2022
+  file gives AUC 0.91. The team says the model is validated and ready for
+  2026 originations. Evaluate.
+candidate_response: |
+  Cross-validation is the gold standard against overfitting, and AUC 0.91
+  is excellent. Recovery is a legitimate economic variable in credit risk.
+  Because CV folds do not train on their own test rows, there is no leakage.
+  I would deploy for 2026.
+verdict: fail
+error_classification:
+  - leakage
+severity: CRITICAL
+earliest_failure_point: statistical correctness
+explanation: |
+  Eventual recovery is not known at origination. Using it as a feature is
+  target leakage (information from the outcome path). CV on the same file
+  cannot detect that the feature will be missing or undefined at decision
+  time. Deploying for 2026 would be unsafe. CRITICAL.
+corrected_reasoning: |
+  Drop any feature that is realized after the credit decision. Rebuild with
+  only origination-time covariates, and validate on a later origination
+  cohort (time-based split), not only shuffled CV.
+golden_response: |
+  The model is not validated for 2026 originations.
+
+  At the moment a loan is booked, "eventual recovery amount on this loan"
+  does not exist. It is an outcome-path variable, strongly tied to default
+  and prepayment. Feeding it to a classifier is leakage: the algorithm is
+  shown information that the 2026 loan officer will not have. AUC 0.91 in
+  shuffled five-fold CV is what one expects when the label and the feature
+  share the same future.
+
+  Cross-validation prevents a different problem (in-sample reuse of the
+  same rows). It does not create a time machine. A proper check is a
+  walk-forward test: train on originations through year t, score loans
+  originated in t+1 using only information known at their origination date.
+
+  I would not deploy. Remove post-decision features, document the
+  information set, and re-estimate. If recovery models are needed, they
+  belong in a loss-given-default module trained on already-defaulted loans,
+  not as an origination score feature.
+
+  Limitation: even a clean information set can fail under a credit-cycle
+  shift; that is a further transport problem, not a reason to keep leakage.
+evaluator_notes: |
+  CRITICAL because a lender would book using a feature that will not exist.
+assumptions:
+  - Recovery is observed only after default or prepayment.
+  - 2026 decisions must use origination-time data.
+validation_steps:
+  - Identify recovery as post-decision information.
+  - Reject shuffled CV as a leakage cure.
+  - Require a time-based validation on a legal information set.

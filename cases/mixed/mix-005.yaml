@@ -1,0 +1,73 @@
+id: MIX-005
+domain: mixed
+title: Congestion charge with incidence and second-best caveats
+prompt: |
+  A city can levy a cordon charge equal to a rough estimate of marginal
+  external congestion cost at the peak. Outline the welfare argument,
+  incidence, a second-best issue if transit is mispriced, and what would
+  overturn the recommendation. No fake citations.
+candidate_response: |
+  If the charge is set at the marginal external cost of an extra PCU-km
+  at the peak, and if other markets are undistorted, the first-order
+  welfare gain is the usual Harberger triangle from reducing traffic to
+  where MSB = MSC. Incidence: drivers with inelastic schedules pay more
+  of the charge in money; those with elastic schedules "pay" in
+  rescheduling or mode shift; landowners near the cordon can capture
+  time savings in rents. If buses are underpriced and crowded, a cordon
+  charge can over-shift cars onto a distorted substitute—second-best
+  suggests a lower charge or a paired transit improvement.
+
+  I would not treat the MEC number as known to the dollar: it depends on
+  the value of time and on the speed-flow curve. A trial with measured
+  speeds, and a distributional offset (lump-sum or transit), is part of
+  the recommendation rather than an afterthought.
+
+  Assumption: no substantial emission or accident externalities left
+  unpriced, or they are absorbed into the same MEC. Limitation: political
+  economy and cordon leakage (boundary parking) can erase the textbook
+  triangle.
+verdict: pass
+error_classification:
+  - none
+severity: PASS
+earliest_failure_point: none
+explanation: |
+  The candidate states the Pigouvian logic, incidence, a concrete
+  second-best problem, measurement limits, and what would overturn the
+  case. No false certainty and no invented papers. Passing fixture.
+corrected_reasoning: |
+  No material correction.
+golden_response: |
+  Under a single undistorted congestion externality, a cordon charge equal
+  to marginal external cost at the relevant margin reduces traffic toward
+  the point where marginal social cost equals marginal social benefit.
+  The welfare gain is the avoided excess of MSC over demand, not the
+  revenue itself (revenue is a transfer).
+
+  Incidence is not "the driver pays." Inelastic peak-hour trips absorb
+  more of the money charge; elastic trips adjust time, route, or mode;
+  time savings can capitalize into land rents inside the cordon. A
+  complete brief names winners and losers.
+
+  If a substitute (crowded underpriced transit) is distorted, the
+  first-best MEC charge need not be second-best optimal. Pairing the
+  charge with transit capacity or pricing, or shading the charge, is the
+  second-best response—not an optional footnote.
+
+  The MEC is an estimate from a speed-flow curve and a value of time, not
+  a constant of nature. Cordon leakage, unpriced accidents or emissions,
+  and general-equilibrium labor-market effects can shrink or overturn the
+  textbook gain. Recommend measurement in a trial, not metaphysical
+  certainty.
+
+  No bibliographic theater is required for this argument.
+evaluator_notes: |
+  Passing fixture MIX-005. Fail fake papers or "must implement at full
+  MEC regardless of transit."
+assumptions:
+  - Peak congestion is the primary externality unless otherwise stated.
+  - Transit pricing may be second-best distorted.
+validation_steps:
+  - Pigouvian logic with MSC vs demand.
+  - Incidence beyond "drivers pay."
+  - Second-best transit caveat and an overturning condition.

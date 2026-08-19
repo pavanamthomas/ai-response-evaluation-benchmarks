@@ -1,0 +1,78 @@
+id: ECON-008
+domain: economics
+title: Compensating versus equivalent variation for a price rise
+prompt: |
+  A consumer has locally nonsatiated strictly convex continuous preferences
+  over two goods. The price of good 1 rises from p1 to p1' > p1; income m and
+  p2 are fixed. Define compensating variation (CV) and equivalent variation
+  (EV) for this price increase, state their signs, and say which is larger in
+  absolute value if good 1 is normal. No numbers are required.
+candidate_response: |
+  CV is the extra income needed at the new prices to restore the original
+  utility: CV = e(p', u0) − e(p, u0), which equals m' − m if m' is the
+  expenditure that achieves u0 at p'. For a price rise, CV > 0 if we speak of
+  compensation paid to the consumer. EV is the income the consumer would
+  forgo at the old prices to be indifferent to the change: EV = e(p, u0) −
+  e(p, u1), or equivalently e(p', u1) − e(p, u1) with signs tracked
+  carefully. Standard textbook sign convention: both CV and EV are positive
+  amounts of money measuring the welfare loss of a price rise.
+
+  If good 1 is normal, the Hicksian demand at the higher utility is larger,
+  so the EV integral of h1 over the price rise exceeds the CV integral.
+  Thus EV > CV > 0 for a price increase of a normal good (loss measured as
+  positive payments). Marshallian consumer surplus lies between them.
+
+  Assumptions: no nonconvexities, interior demands, locally nonsatiated
+  preferences so expenditure functions represent the preference. Limitation:
+  with income effects of either sign the ranking flips if the good is
+  inferior; with multiple price changes path dependence appears for CS but
+  CV and EV remain defined via expenditure functions.
+verdict: pass
+error_classification:
+  - none
+severity: PASS
+earliest_failure_point: none
+explanation: |
+  The candidate defines CV and EV from the expenditure function, gets the
+  welfare-loss sign for a price rise, and states the normal-good ranking
+  EV > CV with Marshallian surplus in between. Assumptions and a limitation
+  are present. Minor notation fuss in one EV line does not overturn the
+  argument.
+corrected_reasoning: |
+  No material correction. Optional cleanup: write CV = e(p', u0) − m and
+  EV = m − e(p, u1) for a price rise with income held at m, both positive
+  when interpreted as loss.
+golden_response: |
+  Let p = (p1, p2), p' = (p1', p2) with p1' > p1, and let u0 = v(p, m),
+  u1 = v(p', m). The expenditure function e(q, u) is the minimum cost of
+  utility u at prices q.
+
+  Compensating variation for the price rise is the extra income needed at
+  the new prices to restore u0:
+  CV = e(p', u0) − m ≥ 0.
+  Equivalent variation is the income that could be taken away at the old
+  prices to mimic u1:
+  EV = m − e(p, u1) ≥ 0.
+  Both are nonnegative welfare-loss measures under local nonsatiation.
+
+  By Shephard's lemma, CV = ∫_{p1}^{p1'} h1(p1, p2, u0) dp1 and
+  EV = ∫_{p1}^{p1'} h1(p1, p2, u1) dp1. If good 1 is normal, Hicksian
+  demand rises with u, so EV > CV. Marshallian surplus
+  ∫ x1(p1, p2, m) dp1 lies between them.
+
+  The construction uses continuous strictly convex locally nonsatiated
+  preferences so that e and h1 exist and represent the preference. It does
+  not require a specific functional form. If good 1 were inferior the
+  ranking of EV and CV would reverse. Path dependence is a problem for
+  Marshallian surplus with several prices, not for CV/EV defined from e.
+evaluator_notes: |
+  Passing fixture. Do not fail for choosing the opposite sign convention
+  (CV as a negative number) if the ranking and definitions stay consistent.
+assumptions:
+  - Continuous, strictly convex, locally nonsatiated preferences.
+  - Single price change; income and the other price fixed.
+  - Good 1 normal for the EV–CV ranking.
+validation_steps:
+  - Check CV and EV are defined from the expenditure function.
+  - Check both measure a loss for a price rise.
+  - Check EV > CV when good 1 is normal (under a consistent sign convention).

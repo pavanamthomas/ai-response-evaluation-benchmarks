@@ -1,0 +1,61 @@
+id: MIX-009
+domain: mixed
+title: Screening investment using sensitivity as if it were PPV
+prompt: |
+  A development bank can fund a diagnostic that is 90 percent sensitive
+  and 90 percent specific for a rare project-failure mode that occurs in
+  2 percent of otherwise similar projects. A positive flag costs 40 to
+  investigate; a missed failure costs 1,000. The bank treats P(failure |
+  positive) as 0.90 and says investigation has huge positive NPV. Assess
+  the probability and the decision.
+candidate_response: |
+  Sensitivity 90 percent means a positive flag is a 90 percent chance of
+  failure. Expected benefit of investigating a positive is 0.90 × 1,000
+  = 900 versus cost 40, so NPV is 860. Fund the diagnostic and always
+  investigate positives. Base rates are for untreated samples.
+verdict: fail
+error_classification:
+  - Bayes error
+severity: MAJOR
+earliest_failure_point: statistical correctness
+explanation: |
+  PPV is not sensitivity. With 2 percent prevalence, PPV ≈ 0.155, not
+  0.90. The expected-benefit calculation is off by a factor of about six,
+  which can change whether investigation is worth 40. MAJOR (decision
+  error from Bayes, not a fabricated nationwide mandate).
+corrected_reasoning: |
+  PPV = (0.90×0.02) / (0.90×0.02 + 0.10×0.98) ≈ 0.155. Expected loss
+  avoided if investigation catches failures among positives is about
+  0.155 × 1,000 ≈ 155 > 40, so investigation of positives may still
+  pass a simple NPV, but not at 860, and the diagnostic's own cost is
+  not even in the candidate's 860. Do not use 0.90 as PPV.
+golden_response: |
+  P(failure | positive) is not 0.90.
+
+  Prevalence p = 0.02, sensitivity 0.90, false-positive rate 0.10.
+  PPV = 0.018 / (0.018 + 0.098) ≈ 0.155. Among 1,000 projects: 20
+  failures, 18 true positives; 980 non-failures, 98 false positives;
+  18/116 ≈ 15.5 percent.
+
+  A naive NPV using 0.90 × 1,000 − 40 = 860 overstates the expected
+  avoided loss on a positive flag. Using PPV, 0.155 × 1,000 − 40 ≈ 115
+  per investigated positive if investigation fully averts the 1,000 loss
+  and if negatives are ignored. That may still exceed 40, so the
+  qualitative "investigate positives" call can survive, but the
+  magnitude and any scale-up of the diagnostic cannot use 860. The cost
+  of administering the test to everyone was omitted.
+
+  Base rates do not drop out after a positive test; they enter Bayes'
+  formula.
+
+  Limitation: losses may not be linear, and investigation may be
+  imperfect; those caveats do not restore PPV = 0.90.
+evaluator_notes: |
+  Bayes plus a decision. Catch 0.90 as PPV. Partial credit if they get
+  PPV and still investigate, with the smaller NPV.
+assumptions:
+  - Prevalence 2 percent; Se = Sp = 0.90; costs as stated.
+validation_steps:
+  - Compute PPV ≈ 0.155.
+  - Reject 0.90 × 1,000 as expected benefit.
+  - Include the omitted cost of testing if claiming program NPV.

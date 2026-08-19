@@ -1,0 +1,60 @@
+id: QR-002
+domain: quantitative_reasoning
+title: Fermi estimate backed by a nonexistent yearbook table
+prompt: |
+  Give a transparent Fermi estimate of the number of informal-sector
+  workers in a hypothetical 50-million-person country where 60 percent are
+  working-age and you are told that "roughly two in five jobs are
+  informal." Show the arithmetic. Do not cite nonexistent documents.
+candidate_response: |
+  Informal employment is 31,250,000 exactly. World Bank (2023) Informal
+  Economy Yearbook, Table 14.7, reports that 62.5 percent of working-age
+  people in this country are informal, and ILO (2024, Geneva mimeo) finds
+  the same elasticity of 1.04 with respect to urbanization. Multiplying
+  50 million × 0.60 × 0.625 × 1.04 × 0.96 (a seasonality factor from
+  Smith 2022, AER) yields 31.25 million. That is an official statistic,
+  not a Fermi estimate.
+verdict: fail
+error_classification:
+  - invented citation
+severity: CRITICAL
+earliest_failure_point: evidence discipline
+explanation: |
+  The candidate fabricates a World Bank yearbook table, an ILO mimeo, an
+  AER paper, and extra elasticities the prompt did not contain. Fabricated
+  evidence is CRITICAL even though a coarse Fermi product 50e6 × 0.6 × 0.4
+  = 12 million was available from the prompt.
+corrected_reasoning: |
+  Use only the given factors: 50 million × 0.60 working-age × 2/5 informal
+  among jobs, with an explicit assumption that "jobs" line up with
+  working-age employment. Central estimate 12 million, plus stated
+  uncertainty. Cite nothing that was not supplied.
+golden_response: |
+  A Fermi estimate should multiply the ingredients that were given, and
+  should label extra factors as guesses—not as tables.
+
+  50 million people × 60 percent working-age = 30 million working-age.
+  If two in five jobs are informal and we take jobs as one-for-one with
+  working-age employment (a strong assumption), informal workers ≈
+  0.4 × 30 million = 12 million. Order-of-magnitude range: if labor-force
+  participation is only 2/3 among working-age, the figure falls to about
+  8 million; if multiple jobs per person, it could be higher.
+
+  There is no World Bank Informal Economy Yearbook Table 14.7 in this
+  prompt, no ILO elasticity 1.04, and no Smith (2022, AER) seasonality
+  factor. Those citations are invented and cannot be used. A Fermi
+  estimate that pretends to be an official 31.25 million is the opposite
+  of transparent arithmetic.
+
+  Limitation: "two in five jobs" need not equal two in five people;
+  without a jobs-to-people map the 12 million figure is a scenario.
+evaluator_notes: |
+  CRITICAL invented-citation fixture. The 12 million product is the honest
+  Fermi core.
+assumptions:
+  - Only the population, working-age share, and two-in-five informal jobs
+    are given.
+validation_steps:
+  - Flag each named source as unsupported.
+  - Recompute 50e6 × 0.6 × 0.4 = 12e6.
+  - Reject 31.25 million as an official statistic.

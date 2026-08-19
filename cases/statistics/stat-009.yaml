@@ -1,0 +1,61 @@
+id: STAT-009
+domain: statistics
+title: Algebraically correct iid OLS standard errors on a state-year panel
+prompt: |
+  A regression of state-year log mortality on a policy dummy uses 50 states
+  times 20 years. The analyst computes the textbook homoskedastic OLS
+  standard error, writes the formula correctly, and reports p = 0.01. The
+  memo says uncertainty is fully captured because the formula is the
+  exact OLS variance under Gauss–Markov. Assess whether the reported
+  uncertainty matches the design.
+candidate_response: |
+  The Gauss–Markov variance is σ² (X'X)^{-1}. I verified the algebra. With
+  that SE, p = 0.01, so the policy effect is significant. Clustering is an
+  optional robustness check for people who dislike Gauss–Markov. I would
+  file the iid SE as the correct uncertainty.
+verdict: fail
+error_classification:
+  - technically correct but semantically wrong
+severity: MAJOR
+earliest_failure_point: statistical correctness
+explanation: |
+  The formula is the right variance **if** errors are iid (or spherical).
+  State-year panels have serial correlation and state-level shocks; the
+  sampling experiment of interest is not 1,000 independent rows. Applying
+  a correct spherical-error formula to the wrong stochastic model is
+  technically correct algebra and semantically wrong inference. MAJOR:
+  p = 0.01 would typically not survive clustering.
+corrected_reasoning: |
+  Keep the OLS point estimate as a descriptive slope if desired, but report
+  uncertainty that matches dependence: cluster by state, or use a
+  randomization/design-based SE if assignment is at state level. Do not
+  treat Gauss–Markov as optional taste.
+golden_response: |
+  The algebra of the homoskedastic OLS variance is correct and the wrong
+  object for this panel.
+
+  Gauss–Markov gives Var(β̂) = σ² (X'X)^{-1} when errors are spherical.
+  State-year mortality is serially correlated and shares state shocks.
+  The information in 1,000 rows is not 1,000 independent draws. The
+  usual consequence is that iid SEs are too small and p = 0.01 overstates
+  evidence. Clustering by state (or a comparable HAC at state level) is
+  not an aesthetic alternative to Gauss–Markov; it is an attempt to match
+  the dependence. If the policy is assigned at the state level, design-
+  based inference on 50 clusters is the relevant finite-population story.
+
+  I would not file the iid p-value as the uncertainty. Report clustered
+  (or bootstrap-by-state) intervals, and treat 50 clusters as a moderate
+  count with its own caveats.
+
+  Limitation: clustering does not fix a bad identifying assumption; it
+  only repairs a variance formula.
+evaluator_notes: |
+  The family is technically correct but semantically wrong: right formula,
+  wrong model. Do not also require them to invent a causal design.
+assumptions:
+  - Observations are state-years with within-state dependence.
+  - The analyst used spherical-error OLS SEs.
+validation_steps:
+  - Grant the formula under spherical errors.
+  - Reject those errors for this panel.
+  - Require clustered or design-based uncertainty.

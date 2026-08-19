@@ -1,0 +1,66 @@
+id: ECONM-010
+domain: econometrics
+title: Occupation dummy interpreted as a causal wage penalty
+prompt: |
+  In a wage regression that includes education, experience, sex, and a full
+  set of occupation dummies, the coefficient on a "retail cashier" dummy
+  (relative to "professional") is −0.22. A brief says the regression shows
+  that moving a worker from professional work into cashier work would cut
+  wages by 22 percent, so occupational desegregation is unnecessary: the gap
+  is a causal occupation penalty already isolated by the controls. Assess.
+candidate_response: |
+  Occupation is a regressor, so its coefficient is the causal effect of
+  occupation. Education and experience are held constant, which blocks
+  confounding. The −0.22 is therefore the ceteris-paribus wage effect of
+  being a cashier. Policy can treat it as the gain from forcing occupational
+  reallocation.
+verdict: fail
+error_classification:
+  - wrong regression interpretation
+severity: MAJOR
+earliest_failure_point: causal validity
+explanation: |
+  Occupation is a choice (or assignment) potentially intermediate between
+  skills, discrimination, and wages. Conditioning on occupation can block
+  a pathway or open a collider; the dummy is not a manipulable treatment
+  identified by OLS. Interpreting −0.22 as the causal effect of moving a
+  worker into cashier work is the bad-control / descriptive-coefficient
+  error. The policy sentence would change.
+corrected_reasoning: |
+  Treat occupation coefficients as descriptive gaps inside a conditional
+  mean, not as effects of counterfactual reassignment. A causal occupation
+  effect needs a design that moves people across jobs (lotteries, displacements
+  with credible re-employment variation) and an explicit mediation target.
+golden_response: |
+  The −0.22 is a conditional log-wage gap between people observed as cashiers
+  and people observed as professionals, after education, experience, and sex.
+  It is not identified as the effect of moving a given worker from
+  professional work into cashier work.
+
+  Occupation is not an exogenous treatment in this regression. It is
+  correlated with unobserved skills, networks, hours, and discrimination,
+  and it may lie on the pathway from those factors to wages. Including it
+  does not "isolate" a causal occupation penalty; it changes the
+  interpretation of every other coefficient as well (education's coefficient
+  becomes a within-occupation slope). That can be useful as description. It
+  is not a policy-ready ATT of reassignment.
+
+  A brief that says desegregation is unnecessary because OLS already netted
+  out occupation has the causal order backward if occupation is part of how
+  inequality operates. To speak about reallocation one needs a model of
+  assignment and a shock that moves people across jobs, not a dummy in a
+  cross-sectional wage equation.
+
+  Limitation: some structural models can interpret occupation coefficients
+  under explicit selection equations; those assumptions are not in the
+  prompt and should not be smuggled in.
+evaluator_notes: |
+  Bad-control / non-manipulable regressor. Do not require the word
+  "collider" if the candidate refuses the causal occupation reading.
+assumptions:
+  - Occupation is chosen or assigned, not randomized in this sample.
+  - The dummy coefficient comes from OLS with the listed controls.
+validation_steps:
+  - Reject causal reassignment interpretation of −0.22.
+  - Note that occupation may be intermediate or confounded.
+  - Withhold the desegregation policy inference.

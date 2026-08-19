@@ -1,0 +1,60 @@
+id: QR-004
+domain: quantitative_reasoning
+title: Ambiguous "average return" with an outlier year
+prompt: |
+  A fund reports annual simple returns: 10 percent, 12 percent, 11 percent,
+  9 percent, and −80 percent. What was the average return? The prompt does
+  not specify mean, median, or compound.
+candidate_response: |
+  The average is the arithmetic mean: (10+12+11+9−80)/5 = −7.6 percent.
+  That is the unique average. The median and CAGR are not averages; they
+  are other statistics. I would tell an investor they earned −7.6 percent
+  per year.
+verdict: fail
+error_classification:
+  - answer to wrong interpretation of ambiguous prompt
+severity: MINOR
+earliest_failure_point: task interpretation
+explanation: |
+  "Average return" is ambiguous, especially with a −80 percent year: the
+  arithmetic mean is −7.6 percent, the median is 10 percent, and the
+  five-year compound (geometric) mean is far more negative than −7.6
+  percent and is what turns 1 into a terminal wealth. The candidate
+  answers one reading as if it were unique and tells the investor they
+  "earned −7.6 percent per year," which is the wrong wealth story. MINOR
+  relative to fabricating data: the arithmetic mean is a legitimate
+  reading of "average," but the prompt required noticing the ambiguity
+  for an investor.
+corrected_reasoning: |
+  Compute all three, name which object answers which question, and do not
+  tell an investor that −7.6 percent is the unique yearly earned rate.
+golden_response: |
+  The prompt does not specify which average.
+
+  Arithmetic mean: (0.10+0.12+0.11+0.09−0.80)/5 = −0.076, i.e. −7.6
+  percent. That object appears in expected-return formulas under iid
+  simple returns; it is not the growth rate of invested capital.
+
+  Median of the five numbers: 10 percent. That describes a typical year
+  and is robust to the crash; it is not a compounding rate.
+
+  Geometric mean: (1.10×1.12×1.11×1.09×0.20)^{1/5} − 1. The product of
+  gross returns is 1.10×1.12×1.11×1.09×0.20 ≈ 0.297, and
+  0.297^{1/5} − 1 ≈ −0.22, about −22 percent per year. Terminal wealth
+  relative to 1 is 0.297, a 70 percent cumulative loss.
+
+  Telling an investor they "earned −7.6 percent per year" silently
+  replaces the question with the arithmetic mean and understates the
+  wealth path. A complete answer names the object.
+
+  Limitation: overlapping returns, fees, and intra-year compounding are
+  not in the table.
+evaluator_notes: |
+  Ambiguous-prompt family. Do not fail a candidate who leads with the
+  arithmetic mean if they also report geometric and median.
+assumptions:
+  - Five annual simple returns as listed; no intra-year cash flows.
+validation_steps:
+  - Compute arithmetic −7.6 percent.
+  - Compute median 10 percent.
+  - Compute geometric ≈ −22 percent and terminal factor ≈ 0.30.

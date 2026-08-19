@@ -1,0 +1,50 @@
+id: STAT-010
+domain: statistics
+title: Incomplete kNN bias-variance write-up
+prompt: |
+  For k-nearest-neighbor regression in one dimension, with a twice
+  differentiable regression function and iid observations, write the leading
+  bias and variance terms as functions of k and n, and say how to think
+  about choosing k. Both the bias order and the variance order are required.
+candidate_response: |
+  Larger k means more smoothing, so variance falls. That is the
+  bias-variance tradeoff. I would pick k by intuition.
+verdict: fail
+error_classification:
+  - incomplete answer
+severity: MINOR
+earliest_failure_point: completeness
+explanation: |
+  The directional remark on variance is right, but the prompt required
+  leading bias and variance orders in k and n. Missing those leaves the
+  answer incomplete without reversing the qualitative tradeoff. MINOR.
+corrected_reasoning: |
+  For standard kNN in 1-d, bias is order (k/n)^2 (smoothing over a
+  neighborhood of width ~ k/n) and variance is order 1/k, up to constants
+  that depend on f and σ². Balancing gives k growing like n^{4/5}.
+golden_response: |
+  Under a twice-differentiable regression function and iid data in one
+  dimension, k-nearest-neighbor regression averages k local outcomes. The
+  neighborhood width is order k/n. A second-order Taylor expansion of m(x)
+  then gives squared bias of order (k/n)^4, hence bias of order (k/n)^2.
+  Variance of an average of k roughly iid errors is order σ²/k.
+
+  Mean squared error therefore behaves like C1 (k/n)^4 + C2 / k. Balancing
+  the two terms yields k of order n^{4/5} and MSE of order n^{-4/5}, the
+  usual 1-d nonparametric rate for twice-smooth m.
+
+  Choosing k "by intuition" is not an answer to this prompt. In practice
+  one uses cross-validation, remembering that CV estimates prediction risk,
+  not a causal m.
+
+  Limitation: in higher dimension d the width is (k/n)^{1/d} and the
+  exponents change; the prompt asked for one dimension.
+evaluator_notes: |
+  Incomplete rather than conceptually reversed. Require both orders, not
+  a full proof of Stone's theorem.
+assumptions:
+  - One-dimensional kNN regression; m twice differentiable; iid sample.
+validation_steps:
+  - Check bias order (k/n)^2 (or equivalent squared-bias (k/n)^4).
+  - Check variance order 1/k.
+  - Treat variance-only answers as incomplete.

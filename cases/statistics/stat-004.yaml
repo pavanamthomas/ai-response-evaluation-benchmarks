@@ -1,0 +1,57 @@
+id: STAT-004
+domain: statistics
+title: Degree-15 polynomial sold as a forecasting model
+prompt: |
+  Annual real GDP growth (n = 32) is fit by a polynomial in time of degree
+  15. In-sample R² is 0.99. The author forecasts next year from the fitted
+  curve and calls the specification a validated forecasting model because
+  R² is near one. Assess.
+candidate_response: |
+  R² = 0.99 means the model explains the data and will therefore forecast.
+  A high-order polynomial is more flexible, which is better. With n = 32,
+  degree 15 is only half the sample, so we are not interpolating every
+  point. I would publish the one-year-ahead forecast as the model prediction.
+verdict: fail
+error_classification:
+  - overfitting
+severity: MAJOR
+earliest_failure_point: statistical correctness
+explanation: |
+  A degree-15 polynomial on 32 observations will hug noise. In-sample R²
+  is not a forecast score. The candidate's deployment of the one-step
+  prediction as "validated" is a material predictive error. MAJOR rather
+  than CRITICAL: it is not fabricated evidence or a causal policy mandate.
+corrected_reasoning: |
+  Do not use this polynomial for forecasting. Use a low-order trend or a
+  time-series model with an out-of-sample or information-criterion check,
+  and report forecast uncertainty.
+golden_response: |
+  In-sample R² of 0.99 does not validate a forecast.
+
+  A degree-15 polynomial has 16 coefficients (including the intercept) on
+  32 annual points. That class can follow idiosyncratic slumps and booms
+  that will not persist. Near-interpolation is exactly the overfitting
+  problem; "degree is only half of n" is not a safeguard. Polynomials in
+  calendar time also explode or oscillate outside the sample, which is a
+  poor property for one-year-ahead GDP.
+
+  A forecasting claim needs a protocol that the fit could have failed:
+  rolling origin evaluation, a holdout of later years, or at least a
+  comparison against a naive benchmark (random walk, AR(1), historical
+  mean) on a loss that is not in-sample R².
+
+  I would not publish the curve's next value as a validated forecast.
+  If a smooth historical description is wanted, say so, and do not call it
+  forecasting.
+
+  Limitation: even a well-tuned AR model can fail in a regime shift; that
+  does not rehabilitate the polynomial.
+evaluator_notes: |
+  Classic overfitting. Fail "R² near 1 ⇒ forecast."
+assumptions:
+  - n = 32 annual observations; polynomial degree 15 in time.
+  - The use case is one-year-ahead forecasting, not in-sample description.
+validation_steps:
+  - Reject in-sample R² as a forecast metric.
+  - Note parameter count versus n.
+  - Require an out-of-sample protocol or withhold the forecast.

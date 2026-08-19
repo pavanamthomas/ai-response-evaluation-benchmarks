@@ -1,0 +1,59 @@
+id: MIX-007
+domain: mixed
+title: Event-study leads used as a targeting success story
+prompt: |
+  A training grant is staggered across regions. An event-study shows
+  negative employment leads of 2–3 percent and a post coefficient of
+  −2 percent. An author writes that the leads show the grant was
+  "well targeted at declining regions, which validates TWFE." Assess.
+candidate_response: |
+  Targeting declining regions is good policy, so negative pre-trends are
+  a feature. TWFE remains the ATT. I would scale the grant toward even
+  more declining regions using the same β̂.
+verdict: fail
+error_classification:
+  - incorrect DiD parallel-trends
+  - incorrect placebo interpretation
+severity: MAJOR
+earliest_failure_point: causal validity
+explanation: |
+  Negative leads mean treated regions were already declining relative to
+  comparisons: parallel trends fails. Calling that "validation" inverts
+  the diagnostic. Targeting may be politically intended, but then TWFE
+  β̂ mixes selection with treatment. MAJOR rather than CRITICAL because
+  the candidate does not shout a nationwide proof, but the identification
+  claim is still wrong.
+corrected_reasoning: |
+  Pre-trends that match the post coefficient are a failed design for ATT.
+  If targeting declining regions is the story, the paper is about
+  selection, not the grant's employment effect, unless a different
+  design holds those trends fixed.
+golden_response: |
+  Leads of −2 to −3 percent against a post coefficient of −2 percent do
+  not validate TWFE. They are the usual evidence that treated regions
+  were already on a worse employment path. Parallel trends is an
+  assumption about untreated potential outcomes, not a compliment to
+  targeting.
+
+  If the grant was deliberately aimed at declining regions, that is a
+  selection rule. It makes a causal employment effect harder to isolate
+  from mean reversion or continuing decline. TWFE β̂ is then especially
+  untrustworthy as ATT, and staggering adds the usual already-treated
+  control problem.
+
+  Scaling toward more declining regions using that β̂ copies a
+  non-identified number into a targeting formula. Either build a design
+  that can absorb differential trends (or exploit a scoring cutoff) or
+  describe targeting without a causal employment claim.
+
+  Limitation: a pre-trend that is small relative to a large, immediate
+  level shift can sometimes be lived with; here the leads are the same
+  size as the post coefficient.
+evaluator_notes: |
+  "Targeting validates pre-trends" is the phrase to catch.
+assumptions:
+  - Event-study leads are comparable in size to the post coefficient.
+validation_steps:
+  - Treat leads as a parallel-trends failure.
+  - Reject TWFE ATT on that basis.
+  - Reject scaling on β̂.

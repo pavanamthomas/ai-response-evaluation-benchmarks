@@ -1,0 +1,51 @@
+id: MIX-008
+domain: mixed
+title: Cost minimization that ignores a required input ratio
+prompt: |
+  A firm must produce q = 12 using f(k, ℓ) = min{k, ℓ/2} (Leontief) at
+  input prices r = 4, w = 2. Minimize cost. A solution uses an interior
+  Cobb-Douglas-style FOC MP_ℓ/MP_k = w/r and reports (k, ℓ) = (3, 6).
+candidate_response: |
+  Set the marginal products' ratio to the input-price ratio. For a
+  symmetric guess, k = 3, ℓ = 6 produces min{3, 3} = 3, which I then
+  scale... actually I will keep (3, 6) because 3 + 6 = 9 is neat. The
+  Leontief kink is optional; interior FOCs always work.
+verdict: fail
+error_classification:
+  - incorrect optimization constraint
+severity: MAJOR
+earliest_failure_point: mathematical correctness
+explanation: |
+  Leontief requires k = ℓ/2 and min{k, ℓ/2} = 12, hence k = 12, ℓ = 24.
+  The candidate uses a smooth FOC that this technology does not have and
+  reports a bundle that produces only 3, not 12. The constraint of the
+  production set is mishandled. (3, 6) is the wrong program, not merely
+  a corner issue.
+corrected_reasoning: |
+  Efficient Leontief: k = ℓ/2 = q = 12, so (k, ℓ) = (12, 24), cost
+  4*12 + 2*24 = 96. Do not apply MP ratios; MPs are not defined in the
+  usual interior sense.
+golden_response: |
+  The technology is Leontief: output is the short side of k and ℓ/2.
+  Cost-minimizing input vectors satisfy k = ℓ/2 = q. For q = 12,
+  (k*, ℓ*) = (12, 24) and C = 4×12 + 2×24 = 96.
+
+  There is no interior tangency. Marginal products are not ordinary
+  derivatives along the kink. Setting MP_ℓ/MP_k = w/r is the constraint
+  set of a different (smooth, substitutable) technology.
+
+  The reported (3, 6) yields min{3, 3} = 3, not 12, so it fails the
+  output constraint as well. Always check f(k, ℓ) ≥ q.
+
+  Limitation: if q were free and the firm chose output, one would add a
+  price of output; here q is required.
+evaluator_notes: |
+  Incorrect constraint/technology FOC. Note that (3, 6) also fails q = 12,
+  which is related to infeasibility for the output constraint; the
+  assigned family is the wrong FOC for Leontief.
+assumptions:
+  - Leontief f(k, ℓ) = min{k, ℓ/2}; q = 12 required.
+validation_steps:
+  - Impose k = ℓ/2 = 12.
+  - Cost 96.
+  - Reject smooth MP-ratio FOC and (3, 6).

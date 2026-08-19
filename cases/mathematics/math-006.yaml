@@ -1,0 +1,61 @@
+id: MATH-006
+domain: mathematics
+title: Envelope theorem and Hotelling's lemma
+prompt: |
+  A competitive firm has a differentiable strictly convex cost function
+  C(q, w) in output q and an input price w, and chooses q > 0 to maximize
+  π(q, p, w) = p q − C(q, w). Using the envelope theorem, show that
+  ∂π*/∂p = q*(p, w), and state the regularity used. No invented citations.
+candidate_response: |
+  Let q*(p, w) solve p − C_q(q, w) = 0 with C_{qq} > 0 so the FOC is
+  sufficient. Profit at the optimum is π*(p, w) = p q*(p, w) − C(q*(p, w), w).
+  Differentiating with respect to p,
+  ∂π*/∂p = q* + (p − C_q) ∂q*/∂p = q*,
+  because the FOC kills the second term. That is the envelope theorem for
+  an unconstrained interior maximum: the indirect objective's derivative
+  with respect to a parameter is the partial of the objective holding the
+  control fixed. Hotelling's lemma is this identity: supply is the price
+  derivative of profit. If a quantity constraint bound, one would need
+  complementary slackness and the envelope would use the Lagrangian;
+  here q is interior.
+
+  Assumption: unique interior differentiable q*. Limitation: with kinks in
+  C the supply correspondence can jump and the derivative may be a
+  supergradient rather than a classical partial.
+verdict: pass
+error_classification:
+  - none
+severity: PASS
+earliest_failure_point: none
+explanation: |
+  The candidate derives the envelope identity from the FOC, names the
+  interior unconstrained regularity, connects it to Hotelling's lemma,
+  and flags the constrained/kink caveat. Passing fixture.
+corrected_reasoning: |
+  No material correction.
+golden_response: |
+  At an interior optimum, p = C_q(q*(p, w), w) and C_{qq} > 0. The value
+  function is π*(p, w) = p q*(p, w) − C(q*(p, w), w). Differentiating
+  with respect to p and substituting the FOC yields
+  ∂π*/∂p = q*(p, w) + (p − C_q) ∂q*/∂p = q*(p, w).
+  Equivalently, the envelope theorem says that the derivative of the
+  optimized objective in a parameter equals the partial of the objective
+  treating the control as fixed. Hotelling's lemma is that identity:
+  output supply is the derivative of profit with respect to the output
+  price.
+
+  Regularity used: unique interior C^1 maximizer, so q* is differentiable
+  by the implicit-function theorem from C_{qq} ≠ 0. If output were at a
+  capacity bound, the envelope would be taken on the Lagrangian and
+  ∂π*/∂p need not equal unconstrained q.
+
+  Limitation: nondifferentiable costs produce a convex π* whose
+  superdifferential contains q*, not necessarily a classical derivative.
+evaluator_notes: |
+  Passing fixture MATH-006. Do not require a citation of Hotelling.
+assumptions:
+  - Differentiable strictly convex C; interior unique maximizer.
+validation_steps:
+  - Recover ∂π*/∂p = q* from the FOC.
+  - State interior unconstrained regularity.
+  - Mention the constrained caveat.

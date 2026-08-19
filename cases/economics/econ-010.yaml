@@ -1,0 +1,68 @@
+id: ECON-010
+domain: economics
+title: Ambiguous "real wages in the 1970s" prompt
+prompt: |
+  What happened to real wages in the 1970s in the United States? Answer with
+  a short quantitative characterization and name the series you are using.
+candidate_response: |
+  Real wages collapsed. Average hourly earnings of production workers in
+  manufacturing, deflated by CPI-U, peaked around 1973 and then fell through
+  the decade, so workers were unambiguously poorer by 1979. That is the real
+  wage. Composition, benefits, and the GDP deflator are irrelevant because
+  the CPI is the cost of living and manufacturing is the wage that matters
+  for "the worker."
+verdict: fail
+error_classification:
+  - answer to wrong interpretation of ambiguous prompt
+severity: MINOR
+earliest_failure_point: task interpretation
+explanation: |
+  The prompt does not specify production vs. all employees, hourly earnings
+  vs. compensation, CPI vs. PCE vs. GDP deflator, or mean vs. median. The
+  candidate silently picks manufacturing AHE deflated by CPI-U and treats it
+  as the unique object. That series did weaken after the early 1970s, so the
+  direction is not invented, but the interpretation of the question is too
+  narrow and too certain. MINOR: a qualified answer using the same series
+  would still be directionally similar.
+corrected_reasoning: |
+  State that "real wages" is not a unique series. Production-worker AHE
+  deflated by CPI shows a weak or declining path after the early 1970s;
+  broader compensation deflated by PCE or a chain deflator is less bleak;
+  composition and fringe benefits move the picture. Answer the prompt by
+  naming a series and listing the alternatives.
+golden_response: |
+  The question is ambiguous: it does not name a pay concept, a deflator, or
+  a population.
+
+  One common reading uses average hourly earnings of production and
+  nonsupervisory workers, deflated by CPI-U. On that reading, real AHE is
+  weak after the early 1970s and can be described as stagnating or falling
+  through 1979, which is the characterization the candidate reported.
+
+  Other readings change the sentence. Real hourly **compensation** (pay plus
+  benefits) deflated by a consumption deflator or by the GDP deflator is a
+  different object; benefits and deflator choice matter in this decade.
+  Economy-wide mean wages mix industries and education groups whose
+  composition shifted. Manufacturing is not "the worker."
+
+  A complete short answer: (i) name the series; (ii) give its 1970s path;
+  (iii) note that CPI-deflated production-worker AHE is not interchangeable
+  with compensation or with median real wages. Without that, the prompt has
+  been replaced by a narrower question and answered as if the replacement
+  were unique.
+
+  Limitation: this golden response does not insert a fabricated year-by-year
+  table. A briefing with official data should pull the named NIPA or BLS
+  series rather than rely on memory of a turning point.
+evaluator_notes: |
+  Do not treat this as a facts-olympics item. The defect is silent
+  disambiguation plus overcertainty, not the claim that CPI-deflated AHE
+  was weak.
+assumptions:
+  - Multiple official U.S. real-wage concepts exist for the 1970s.
+  - The prompt does not specify which concept.
+validation_steps:
+  - Check whether the series is named.
+  - Check whether alternatives (compensation, deflator, composition) are
+    acknowledged.
+  - Penalize "unambiguously poorer" as the unique reading.

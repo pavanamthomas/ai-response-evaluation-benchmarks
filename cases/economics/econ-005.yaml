@@ -1,0 +1,69 @@
+id: ECON-005
+domain: economics
+title: Tiny elasticity with a very small p-value
+prompt: |
+  A well-identified difference-in-differences estimate of the price elasticity
+  of demand for a vaccine is −0.02 (clustered SE 0.004, p < 0.001). The
+  outcome is log quantity, the regressor is log out-of-pocket price. A slide
+  says: "The effect is highly significant, so demand is highly sensitive to
+  price; a 10 percent subsidy will raise uptake a lot." Evaluate the slide.
+candidate_response: |
+  The slide is right on the economics. Statistical significance at 0.1 percent
+  means the elasticity is large in the only sense that matters for policy: we
+  know it is not zero. An estimate of −0.02 with p < 0.001 is stronger evidence
+  of sensitivity than an estimate of −0.8 with p = 0.06. A 10 percent price
+  cut therefore produces a large uptake gain; I would describe demand as
+  elastic.
+verdict: fail
+error_classification:
+  - statistical vs economic significance
+severity: MINOR
+earliest_failure_point: conceptual correctness
+explanation: |
+  Identification is granted by the prompt, and the sign is negative, so the
+  candidate is directionally right that price reduces quantity. The failure is
+  equating a small p-value with a large elasticity and calling |ε| = 0.02
+  "elastic." A 10 percent price cut raises quantity by about 0.2 percent, which
+  is not "a lot." This does not reverse the qualitative comparative static, so
+  severity is MINOR rather than MAJOR.
+corrected_reasoning: |
+  Keep the causal sign. Report that demand is extremely inelastic: ε̂ ≈ −0.02.
+  A 10 percent subsidy raises quantity by roughly 0.2 percent if the local
+  elasticity applies. "Highly significant" describes precision, not magnitude.
+  Elastic demand requires |ε| > 1.
+golden_response: |
+  The DiD estimate can be treated, per the prompt, as a local price elasticity
+  of about −0.02. That is a precisely estimated **small** effect, not evidence
+  that demand is highly sensitive to price.
+
+  Statistical significance answers whether ε = 0 is compatible with the
+  sampling variation given the design. Here it is not: −0.02 / 0.004 = −5.
+  Economic significance answers how large the derivative is for a decision.
+  |ε| = 0.02 means a 10 percent out-of-pocket cut raises quantity by about
+  0.2 percent if the elasticity is stable in that neighborhood. That is not
+  "a lot" of uptake. Demand is inelastic (|ε| < 1), indeed almost perfectly
+  inelastic on this estimate.
+
+  The comparison with an imprecise −0.8 is the usual trap. A larger point
+  estimate with p = 0.06 can be more policy-relevant and still statistically
+  fragile; a tiny estimate with p < 0.001 is the opposite. Do not rank
+  interventions by p-values.
+
+  For the slide: replace "highly sensitive" with "tightly estimated and
+  economically small." A subsidy may still be justified on epidemiological
+  externalities; it should not be justified by this elasticity's p-value.
+
+  Limitation: if the subsidy moves price far from the observed support, the
+  local elasticity need not apply—but that caveat does not rescue the claim
+  that −0.02 is large.
+evaluator_notes: |
+  Do not upgrade to MAJOR unless the candidate also breaks identification.
+  The prompt told them the estimate is well-identified; the defect is
+  magnitude versus p-value, plus the word "elastic."
+assumptions:
+  - The given DiD coefficient is a local log-log elasticity as stated.
+  - A 10 percent subsidy is a 10 percent fall in out-of-pocket price.
+validation_steps:
+  - Compute 10 percent × 0.02 = 0.2 percent quantity change.
+  - Check the language "elastic" against |ε| > 1.
+  - Separate p-value from economic size.

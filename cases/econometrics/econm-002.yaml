@@ -1,0 +1,67 @@
+id: ECONM-002
+domain: econometrics
+title: Weak quarter-of-birth instrument used as if consistency sufficed
+prompt: |
+  A 2SLS regression of log wages on years of schooling, instrumented by
+  quarter of birth dummies, has a first-stage F-statistic of 2.1 (three
+  excluded instruments). The 2SLS schooling coefficient is 0.24. The OLS
+  coefficient is 0.08. The author writes that 2SLS is consistent whenever
+  the instrument is relevant, "however weakly," and that 0.24 is therefore
+  the causal return. Assess.
+candidate_response: |
+  Consistency is an asymptotic statement: if Cov(Z, S) ≠ 0, 2SLS converges
+  to the LATE. F = 2.1 is still nonzero correlation, so the estimator is
+  consistent. Finite-sample bias exists in all estimators. I would publish
+  0.24 as the causal return and note that it exceeds OLS, which confirms
+  downward measurement-error bias in OLS rather than a weak-instrument
+  problem. Three instruments are better than one.
+verdict: fail
+error_classification:
+  - weak instrument
+severity: CRITICAL
+earliest_failure_point: statistical correctness
+explanation: |
+  F = 2.1 is a textbook weak first stage. 2SLS is then biased toward OLS in
+  finite samples, standard errors are unreliable, and "consistency if
+  relevance holds" is the wrong operational criterion. Reporting 0.24 as a
+  causal return is unsafe identification-plus-inference. Fixture severity
+  CRITICAL.
+corrected_reasoning: |
+  Do not interpret 0.24. With F ≈ 2, the concentration parameter is too small
+  for Gaussian 2SLS inference. Weak-IV robust procedures (Anderson–Rubin,
+  LIML with robust CR, or a pre-test that simply withholds 2SLS) are required.
+  Three weak instruments can worsen the bias. The OLS–2SLS gap is not
+  identification of measurement error.
+golden_response: |
+  Quarter of birth may or may not be a credible design in a given sample; that
+  is a separate exclusion discussion. On the numbers given, the instrument is
+  **weak**: a first-stage F of 2.1 on three excluded dummies is far below any
+  conventional threshold for treating 2SLS as approximately unbiased and for
+  using conventional standard errors.
+
+  Consistency when the population first stage is nonzero does not justify the
+  author's sentence. In the weak-IV sequence the first stage shrinks with the
+  sample in the relevant local-to-zero sense, 2SLS is biased toward OLS, and
+  the median of the 2SLS estimator need not sit at LATE. Extra instruments
+  that are also weak add overidentification without adding strength.
+
+  The jump from OLS 0.08 to 2SLS 0.24 is what one often sees when the first
+  stage is noisy: 2SLS can wander. It is not a demonstration that OLS is
+  attenuated by measurement error.
+
+  I would not publish 0.24 as the causal return. Either report Anderson–Rubin
+  confidence sets (which may be unbounded) or conclude that this sample does
+  not identify the return with this instrument. Exclusion remains an open
+  substantive issue even if F were large.
+
+  Limitation: a just-identified stronger specification, if one existed, would
+  still be LATE for quarter-of-birth compliers, not ATE.
+evaluator_notes: |
+  Known fixture. "2SLS is consistent however weak" is the phrase to catch.
+assumptions:
+  - First-stage F = 2.1 is the relevant concentration diagnostic given here.
+  - Conventional 2SLS SEs are the author's inferential method.
+validation_steps:
+  - Treat F = 2.1 as weak, not as "nonzero so consistent."
+  - Do not accept 0.24 as a reportable causal return.
+  - Note that more weak instruments are not a remedy.

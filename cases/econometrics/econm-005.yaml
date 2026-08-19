@@ -1,0 +1,61 @@
+id: ECONM-005
+domain: econometrics
+title: Failed placebo read as robustness
+prompt: |
+  A difference-in-differences estimate of a 2014 subsidy on log investment is
+  0.12 (p = 0.03). A placebo that moves the subsidy date to 2011 in a
+  2008–2013 sample yields 0.09 (p = 0.14). The author writes: "The placebo is
+  insignificant, confirming the design; anticipation is a feature, not a
+  bug." Evaluate the placebo interpretation.
+candidate_response: |
+  Robustness is about p-values. The real estimate is significant; the placebo
+  is not. That is a pass. A coefficient of 0.09 shows markets priced in the
+  subsidy early, which supports a causal channel rather than confounding.
+  I would call the specification validated and keep 0.12 as ATT.
+verdict: fail
+error_classification:
+  - incorrect placebo interpretation
+severity: MAJOR
+earliest_failure_point: causal validity
+explanation: |
+  The placebo coefficient is 75 percent of the main estimate. Insignificance
+  at 5 or 10 percent is consistent with noise, not with a passed null of
+  zero. Reading a large placebo as "anticipation therefore causal" inverts
+  the diagnostic. This is MAJOR: it wrecks the robustness claim without the
+  candidate also inventing a nationwide mandate.
+corrected_reasoning: |
+  Interpret the placebo by magnitude first. 0.09 versus 0.12 is a failed
+  (or at best inconclusive) placebo. If anticipation is the story, retiming
+  the event is required; one cannot keep 2014 as time zero and call 2011 a
+  successful placebo.
+golden_response: |
+  The placebo does not confirm the design.
+
+  A placebo that assigns a fake 2011 treatment should estimate something
+  near zero if 2008–2013 is a clean pre-period and if the 2014 subsidy is
+  the only shock in that window. The estimate 0.09 is the same order as
+  0.12. The p-value 0.14 means the placebo is imprecise, not that it passed.
+  Treating "insignificant" as "equal to zero" is the error.
+
+  Anticipation cannot rescue this. If firms invest in 2011 because they
+  foresee a 2014 subsidy, then 2014 is the wrong event date and the 2011
+  coefficient is part of the treatment path. In that case the original DiD
+  that uses 2011 as a control period is contaminated. One would shift time
+  zero to the information date and test new leads. One would not file the
+  2011 estimate under robustness.
+
+  I would not keep 0.12 as ATT on the strength of this placebo. Either the
+  pre-period is already moving, or the placebo is too noisy to help. Both
+  readings undermine the author's sentence.
+
+  Limitation: a tighter placebo (more pre-years, an unaffected outcome)
+  could still be informative; the present test is not a green light.
+evaluator_notes: |
+  Catch "p > 0.10 therefore placebo passed" when the point estimate is large.
+assumptions:
+  - Main and placebo coefficients are comparable log-investment effects.
+  - The placebo sample is intended as a pre-period.
+validation_steps:
+  - Compare 0.09 to 0.12, not only p-values.
+  - Reject anticipation-as-robustness without retiming.
+  - Withhold ATT confirmation.

@@ -1,0 +1,55 @@
+id: STAT-001
+domain: statistics
+title: p-value as the probability the null is true
+prompt: |
+  A two-sided test of H0: β = 0 in a pre-registered RCT yields p = 0.04.
+  Interpret the p-value for a non-statistical audience. State what it is
+  and what it is not.
+candidate_response: |
+  p = 0.04 means there is a 4 percent probability that the null is true, and
+  therefore a 96 percent probability that the alternative is true and that
+  the result will replicate. After seeing the data, those are the posterior
+  probabilities. I would tell the minister the treatment works with 96
+  percent probability.
+verdict: fail
+error_classification:
+  - p-value error
+severity: MAJOR
+earliest_failure_point: statistical correctness
+explanation: |
+  The candidate inverts the conditional probability and treats p as a
+  posterior that the treatment works and will replicate. That changes the
+  ministerial takeaway from "the result is unusual under H0" to "96 percent
+  chance it works." Known fixture MAJOR.
+corrected_reasoning: |
+  A p-value is the probability, under a specified H0 and sampling model, of
+  a statistic at least as extreme as observed. It is not P(H0 | data) and
+  not a replication probability. A decision still needs an estimand, an
+  effect size, and pre-specification.
+golden_response: |
+  p = 0.04 is not a 4 percent chance that β = 0.
+
+  Under the pre-registered two-sided test and its sampling model, p is the
+  probability of obtaining a test statistic as or more extreme than the one
+  observed **if H0 were true**. It is P(data as extreme | H0), not
+  P(H0 | data). Moving to a 96 percent posterior that "the treatment works"
+  would require a prior on β and a model for the alternative. Replication
+  probability is a different object still (it depends on power and on the
+  true effect).
+
+  For a minister: the RCT result is unusual under a zero average effect,
+  at the conventional 5 percent threshold that was pre-registered. Report
+  the point estimate and interval as well. Do not translate p = 0.04 into
+  "96 percent probability it works."
+
+  Limitation: even a correct p-value interpretation does not by itself
+  deliver policy; economic magnitude and external validity remain.
+evaluator_notes: |
+  Known fixture. Catch P(H0|data) and replication claims.
+assumptions:
+  - Frequentist two-sided RCT test as described.
+  - No prior is supplied.
+validation_steps:
+  - Reject p as P(H0 true).
+  - Reject 96 percent replication or "it works" probability.
+  - State the correct conditional.

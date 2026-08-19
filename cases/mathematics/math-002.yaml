@@ -1,0 +1,53 @@
+id: MATH-002
+domain: mathematics
+title: Equality Lagrange on a capacity inequality
+prompt: |
+  Maximize profit π = 12x − x^2 − 2y subject to x + y ≤ 10, x ≥ 0, y ≥ 0.
+  The candidate is asked to state the correct constraint set and to find
+  the optimum. A submitted solution treats x + y = 10 as an identity for
+  all candidate points and never checks the inequality.
+candidate_response: |
+  Substitute y = 10 − x into profit: π = 12x − x^2 − 2(10 − x) =
+  14x − x^2 − 20. Then π' = 14 − 2x = 0, so x = 7, y = 3. Both nonnegative,
+  done. The inequality is the same as the equality because extra slack would
+  waste a scarce capacity that always has a positive shadow price.
+verdict: fail
+error_classification:
+  - incorrect optimization constraint
+severity: MAJOR
+earliest_failure_point: mathematical correctness
+explanation: |
+  Replacing the inequality x + y ≤ 10 with an identity is the wrong
+  program unless the constraint is shown to bind. Profit is strictly
+  decreasing in y, so the optimum has y = 0 and slack capacity; the
+  candidate's (7, 3) is feasible but not optimal. Forcing equality
+  changes the answer from (6, 0) to (7, 3).
+corrected_reasoning: |
+  Because ∂π/∂y = −2 < 0, y* = 0. Then maximize 12x − x^2 on 0 ≤ x ≤ 10,
+  which gives x* = 6. The capacity constraint is slack. Forcing x + y = 10
+  is a different (wrong) problem.
+golden_response: |
+  The feasible set is the triangle x ≥ 0, y ≥ 0, x + y ≤ 10. It is not the
+  line x + y = 10.
+
+  Profit decreases in y (∂π/∂y = −2), so any interior y can be cut to raise
+  π. Thus y* = 0. The problem reduces to max_{0≤x≤10} 12x − x^2. The
+  unconstrained critical point x = 6 lies in (0, 10), and the second
+  derivative −2 < 0, so (x*, y*) = (6, 0). Capacity slack is 4. The
+  multiplier on x + y ≤ 10 is zero by complementary slackness.
+
+  Substituting y = 10 − x assumes a binding constraint and solves a
+  different program. The point (7, 3) is feasible but not optimal:
+  π(7, 3) = 12*7 − 49 − 6 = 29, while π(6, 0) = 72 − 36 = 36.
+
+  Limitation: if y entered positively, one would use KKT and might bind
+  capacity; that is not this payoff.
+evaluator_notes: |
+  Incorrect constraint (equality vs inequality) that changes the optimum.
+  Do not mark this as infeasible: (7, 3) satisfies x + y ≤ 10.
+assumptions:
+  - Objective and inequality set as stated; no other constraints.
+validation_steps:
+  - Check ∂π/∂y < 0 implies y = 0.
+  - Confirm (6, 0) beats (7, 3).
+  - Reject automatic substitution of x + y = 10.

@@ -1,0 +1,55 @@
+id: MIX-010
+domain: mixed
+title: Nowcast trained on revised GDP and sold as real-time accuracy
+prompt: |
+  A nowcast of quarter t GDP growth is trained using, among other
+  features, the fully revised GDP growth for quarter t published two
+  years later. Walk-forward "validation" still uses those revised
+  values because they sit in the same spreadsheet. In-sample RMSE is
+  tiny. The team reports that the model has been validated for real-time
+  policy use next quarter. Evaluate.
+candidate_response: |
+  Using the truth as a feature is the best possible nowcast; RMSE should
+  be tiny. Walk-forward is validation. Vintage data are a purist concern.
+  I would send the nowcast to the monetary-policy meeting as real-time.
+verdict: fail
+error_classification:
+  - leakage
+  - overfitting
+severity: CRITICAL
+earliest_failure_point: statistical correctness
+explanation: |
+  Revised contemporaneous GDP is not in the real-time information set.
+  Training and "validating" on it is leakage; tiny RMSE is overfitting to
+  the target itself. Shipping that to a policy meeting is unsafe.
+  CRITICAL.
+corrected_reasoning: |
+  Rebuild using only vintages available at the nowcast origin (first
+  releases, monthly indicators). Validate on a real-time replica, not on
+  a spreadsheet that already contains later revisions.
+golden_response: |
+  The model is not a nowcast of quarter t; it is a regression that has
+  been shown the later revision of the same object it claims to predict.
+
+  A real-time nowcast at date τ in quarter t may use data published by τ,
+  not the two-years-later GDP vintage for t. Putting that vintage in X is
+  leakage. Walk-forward that still reads from the same revised column
+  does not repair the information set. Tiny RMSE is the signature of a
+  feature that is nearly the label, i.e. overfitting to leaked truth.
+
+  I would not send this to a policy meeting. Reconstruct vintage matrices,
+  freeze the information set at each origin, and report RMSE on those
+  replicas. Then compare to a naive benchmark (survey nowcast, AR on the
+  first release).
+
+  Limitation: even a clean vintage model can fail in a pandemic-type
+  break; that is not a reason to keep the leaked feature.
+evaluator_notes: |
+  Leakage plus overfitting. CRITICAL because of claimed real-time policy
+  use.
+assumptions:
+  - Fully revised GDP for quarter t is unavailable at the nowcast origin.
+validation_steps:
+  - Identify revised GDP as future information.
+  - Reject tiny RMSE as validation.
+  - Require a vintage-real-time protocol.

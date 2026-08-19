@@ -1,0 +1,61 @@
+id: ECONM-001
+domain: econometrics
+title: Contemporaneous GDP growth as an instrument for spending
+prompt: |
+  A researcher wants the effect of state government purchases G on the state
+  unemployment rate U. The proposed instrument for G is the same year's state
+  GDP growth. The first-stage F-statistic is 28. Discuss identification.
+candidate_response: |
+  The instrument is strong (F = 28), so 2SLS is consistent and approximately
+  unbiased. GDP growth is as good as random with respect to fiscal policy
+  because it is a macroeconomic aggregate. Exclusion holds because we care
+  about unemployment, not GDP. I would report the 2SLS coefficient as the
+  causal effect of spending on unemployment and move to policy.
+verdict: fail
+error_classification:
+  - invalid IV
+severity: CRITICAL
+earliest_failure_point: causal validity
+explanation: |
+  Relevance is not the issue; exclusion and as-if randomness are. GDP growth
+  is an outcome in the same macro system as unemployment and is a direct
+  shifter of tax receipts and of Okun-type links to U. Using it as Z for G
+  is an invalid instrument. Strength plus invalidity is a particularly
+  dangerous combination.
+corrected_reasoning: |
+  Reject the instrument. Z = GDP growth fails exclusion (it affects U through
+  labor demand, not only through G) and fails independence (shocks to U and
+  to GDP are jointly determined). A large F-statistic does not repair that.
+golden_response: |
+  The instrument is invalid. A first-stage F of 28 speaks only to relevance.
+  Identification of a causal effect of G on U by 2SLS requires, among other
+  conditions, that GDP growth affect unemployment only through government
+  purchases and that it be as good as randomly assigned with respect to the
+  structural error in the U equation.
+
+  Neither condition is plausible. GDP growth enters Okun's relationship with
+  unemployment directly: demand shocks move both Y and U. It also moves tax
+  bases and automatic spending, so it is not exogenous to the fiscal residual.
+  If anything, G may respond to Y, which is reverse causation in the first
+  stage, not a design.
+
+  A strong invalid instrument delivers a precise estimate of a mixture that
+  is not the structural effect of purchases. I would not report 2SLS here as
+  causal and I would not take it to policy.
+
+  A defensible alternative would start from a narrative or legislative
+  spending shifter, a federal pass-through formula with a kink, or a timing
+  restriction that can be argued, not from contemporaneous GDP growth.
+
+  Limitation: even a valid instrument would typically deliver LATE for
+  compliers whose spending moves with that instrument, not a statewide ATE.
+evaluator_notes: |
+  CRITICAL because of false identification with a strong first stage.
+  Candidates who only say "F is large so we are fine" fail.
+assumptions:
+  - Unemployment and GDP are jointly determined in a demand cycle.
+  - The instrument is contemporaneous state GDP growth as stated.
+validation_steps:
+  - Separate relevance (F = 28) from exclusion.
+  - Name a direct path from GDP growth to U that bypasses G.
+  - Refuse a policy ATT from this 2SLS.

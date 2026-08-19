@@ -1,0 +1,65 @@
+id: ECON-007
+domain: economics
+title: Incomplete Solow residual accounting
+prompt: |
+  For a growth-accounting brief: given Y = A F(K, H, L) with constant returns
+  and competitive factor payments, write the Solow residual in growth rates
+  and list the two measurement problems that most often contaminate Â when
+  H (human capital) is omitted and when utilization is cyclical. The brief
+  must include both the formula and both problems.
+candidate_response: |
+  The residual is ΔA/A = ΔY/Y − α ΔK/K − (1 − α) ΔL/L, the usual two-factor
+  form. That is the accounting identity used in every textbook. I will not
+  complicate the brief with human capital or utilization; those are second-
+  order relative to getting TFP on the page.
+verdict: fail
+error_classification:
+  - incomplete answer
+severity: MINOR
+earliest_failure_point: completeness
+explanation: |
+  The two-factor residual is locally correct as far as it goes, but the prompt
+  required H in the technology and two named measurement problems. Omitting
+  them leaves the brief unusable for the question that was asked. The
+  qualitative TFP idea is not reversed, so MINOR.
+corrected_reasoning: |
+  With three factors, ΔA/A = ΔY/Y − s_K ΔK/K − s_H ΔH/H − s_L ΔL/L, shares
+  summing to one under CRS and competitive payments. Omitting H loads human-
+  capital deepening into A. Ignoring utilization loads labor hoarding and
+  capital shut-in into A over the cycle.
+golden_response: |
+  Under Y = A F(K, H, L), constant returns, and competitive factor payments,
+  log-differentiate:
+
+  ΔY/Y = ΔA/A + s_K ΔK/K + s_H ΔH/H + s_L ΔL/L,
+
+  with cost shares s_K + s_H + s_L = 1. The Solow residual is therefore
+
+  ΔA/A = ΔY/Y − s_K ΔK/K − s_H ΔH/H − s_L ΔL/L.
+
+  Two measurement problems requested by the brief:
+
+  1. If H is omitted and only K and L are subtracted, any growth in human
+     capital is attributed to A. Measured TFP then mixes technology with
+     schooling and skills.
+  2. If utilization of capital and effort of labor move cyclically and are
+     not measured, the residual inherits that utilization. A recession can
+     look like technological regress when plants are idle.
+
+  The candidate's two-factor formula is the special case s_H = 0 and no
+  utilization correction. It does not answer this prompt. A ministry that
+  plots that residual as "productivity" over a slump will misread the cycle.
+
+  Limitation: factor shares need not equal output elasticities if markups or
+  non-constant returns are present; that is a further contamination, not a
+  substitute for including H and utilization when the prompt asked for them.
+evaluator_notes: |
+  Incomplete, not conceptually inverted. Do not mark CRITICAL. Award no PASS:
+  the prompt listed required parts.
+assumptions:
+  - CRS and competitive factor payments, so shares equal elasticities.
+  - H is a measured or measurable human-capital aggregate in the target formula.
+validation_steps:
+  - Confirm the residual subtracts a human-capital term.
+  - Confirm omitted H and cyclical utilization are both named.
+  - Treat a two-factor-only answer as incomplete.

@@ -1,0 +1,59 @@
+id: STAT-002
+domain: statistics
+title: Realized 95 percent confidence interval as a posterior
+prompt: |
+  A frequentist 95 percent Wald interval for a mean difference is [1.2, 3.4].
+  A note says: "There is a 95 percent probability that the true mean
+  difference lies between 1.2 and 3.4." Correct the statement if needed.
+candidate_response: |
+  The note is exactly the definition of a confidence interval. After the
+  data are in, the random interval has realized as [1.2, 3.4], so that
+  interval contains the parameter with probability 0.95. That is what
+  coverage means. A Bayesian interval would be a different number, but
+  the wording is fine for Wald intervals.
+verdict: fail
+error_classification:
+  - CI error
+severity: MAJOR
+earliest_failure_point: statistical correctness
+explanation: |
+  Coverage is a property of the procedure: 95 percent of intervals constructed
+  this way contain the fixed parameter. For the realized interval [1.2, 3.4],
+  the parameter is either in or out; a frequentist probability statement
+  attaching 0.95 to that specific interval is the usual error. It changes
+  how a reader treats this particular number pair as a posterior.
+corrected_reasoning: |
+  Replace the note with: the Wald procedure has 95 percent coverage under
+  the stated sampling model; we cannot assign 0.95 to this realized interval
+  without a prior. Report [1.2, 3.4] as an interval from a 95 percent
+  procedure.
+golden_response: |
+  The note is the standard misreading of a frequentist confidence interval.
+
+  Before the sample is drawn, a 95 percent Wald procedure produces a random
+  interval that covers the fixed parameter in 95 percent of repetitions
+  (under the model's regularity conditions). After observing the data, the
+  interval is the number pair [1.2, 3.4]. The parameter is not random in
+  the frequentist experiment, so it is not correct to say that this pair
+  contains the mean difference with probability 0.95. Probability 0.95
+  attached to a realized interval is a posterior statement and needs a
+  prior plus a likelihood.
+
+  A careful frequentist sentence: we computed a 95 percent confidence
+  interval, [1.2, 3.4]; if the Wald model is right, the procedure covers in
+  95 percent of similar experiments. Whether 1.2 to 3.4 is a plausible
+  posterior range is a Bayesian question not answered here.
+
+  Limitation: numerically, Wald and some posterior intervals can coincide
+  under a flat prior; that coincidence does not make the candidate's wording
+  a frequentist definition.
+evaluator_notes: |
+  Do not require a lecture on all interval types. Fail the realized-interval
+  probability claim.
+assumptions:
+  - Interval is a frequentist Wald 95 percent CI as stated.
+  - No prior is provided.
+validation_steps:
+  - Distinguish procedure coverage from P(θ ∈ [1.2, 3.4] | data).
+  - Correct the note's wording.
+  - Avoid inventing a Bayesian number.

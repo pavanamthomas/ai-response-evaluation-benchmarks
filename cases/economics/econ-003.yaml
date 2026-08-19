@@ -1,0 +1,65 @@
+id: ECON-003
+domain: economics
+title: OLS schooling coefficient as the causal return
+prompt: |
+  In a cross section of workers, a regression of log hourly wages on years of
+  completed schooling, a quadratic in potential experience, and sex yields a
+  schooling coefficient of 0.092 (robust SE 0.006). There are no test scores,
+  parental background measures, or instruments. Interpret the 0.092 for a
+  treasury memo on the private return to an extra year of school.
+candidate_response: |
+  An extra year of school raises wages by 9.2 percent. The estimate is precise,
+  so this is the private causal return. Ability is already in the residual; by
+  the OLS formula it is uncorrelated with schooling once experience and sex are
+  controlled. Treasury can use 9.2 percent as the Mincerian causal return in
+  cost-benefit work on expanding secondary school.
+verdict: fail
+error_classification:
+  - OVB
+severity: MAJOR
+earliest_failure_point: causal validity
+explanation: |
+  The candidate treats a short Mincer OLS coefficient as a causal private
+  return. Ability, discount rates, and family background are classic omitted
+  variables correlated with schooling and wages. The claim that OLS residuals
+  are orthogonal to schooling by construction confuses the mechanical residual
+  with the structural error. The conclusion for cost-benefit would change if
+  OVB is acknowledged.
+corrected_reasoning: |
+  Interpret 0.092 as the partial association of log wages with schooling in
+  this controlled cross section, not as ATT or ATE of a year of school.
+  Ability bias typically pushes the OLS coefficient up relative to a design
+  that holds latent skill fixed; measurement error in years of school pushes
+  the other way. Treasury should not insert 9.2 percent as a structural return.
+golden_response: |
+  The 0.092 is a partial correlation: workers with one more recorded year of
+  school have about 9.2 percent higher hourly wages in this sample after a
+  quadratic in potential experience and a sex dummy. It is not, on the
+  information given, the causal private return to an extra year of school.
+
+  Write a simple omitted-variable formula. Suppose log wage = ρS + αA + u,
+  with A latent ability (or family resources) correlated with S. Then
+  plim ρ̂_OLS = ρ + α δ, where δ is the coefficient from projecting A on S
+  and the included controls. If α > 0 and δ > 0, OLS overstates ρ. OLS does
+  **not** make A uncorrelated with S; it only makes the fitted residual
+  uncorrelated with the included regressors.
+
+  For a treasury memo, report 0.092 as an associational Mincer slope and state
+  that a causal return requires a design (compulsory-schooling reforms, a
+  discontinuity, twins, or a credible instrument) and an explicit estimand
+  (often LATE for compliers, which need not equal the return for students
+  who would attend anyway). Cost-benefit at 9.2 percent would be premature.
+
+  Limitation: attenuation from noisy years-of-schooling can offset ability
+  bias, so even the direction of OVB is not identified from this table alone.
+evaluator_notes: |
+  Reward candidates who write the OVB formula and refuse to hand 9.2 percent
+  to cost-benefit. Naming Card-style IV is optional; inventing a specific
+  paper's number is not allowed in the golden response.
+assumptions:
+  - The listed controls are the only covariates.
+  - Latent ability or family background may correlate with schooling and wages.
+validation_steps:
+  - Check that 0.092 is not labeled a causal return without extra assumptions.
+  - Check that orthogonality of OLS residuals is not used as identification.
+  - Confirm the memo recommendation is qualified or withheld.

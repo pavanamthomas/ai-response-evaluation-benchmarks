@@ -1,0 +1,54 @@
+id: MIX-004
+domain: mixed
+title: Saving-investment identity treated as a causal law
+prompt: |
+  In a closed economy, S = I is an accounting identity at given output.
+  A note argues: "Therefore a policy that raises household saving will
+  raise investment one-for-one, and output cannot fall." Evaluate.
+candidate_response: |
+  Identities are the strongest causal statements because they hold in the
+  data by construction. Raising S raises I by the same amount. Keynesian
+  stories that output might fall are inconsistent with S = I. I would
+  score a saving subsidy as a one-for-one investment subsidy.
+verdict: fail
+error_classification:
+  - wrong economic definition
+severity: MAJOR
+earliest_failure_point: conceptual correctness
+explanation: |
+  The candidate confuses an equilibrium/accounting identity with a
+  behavioral causal law. If a saving shift also moves output, both S and
+  I can fall together. The identity does not identify dI/d(saving
+  preference). The policy conclusion changes.
+corrected_reasoning: |
+  S = I (closed, no government, or S including public saving) is an
+  identity for realized quantities. A saving-preference shock requires a
+  model of goods-market equilibrium (interest rate, output, or both).
+  Investment can fall if output falls, while the identity still holds.
+golden_response: |
+  S = I does not imply that a policy which raises desired household
+  saving raises investment one-for-one, and it does not imply that
+  output cannot fall.
+
+  An identity constrains realized flows. It does not specify which
+  variable adjusts. In a classical full-employment story, the interest
+  rate falls and I rises with S. In a Keynesian story with output below
+  capacity, an increase in desired saving can reduce consumption and
+  output, and realized investment can fall with realized saving; S = I
+  still holds at the new, lower level. The identity is true in both
+  stories and therefore identifies neither.
+
+  Scoring a saving subsidy as a one-for-one investment subsidy smuggles
+  in a full-employment loanable-funds model without saying so.
+
+  Limitation: open-economy identities replace S − I with NX; that is
+  another accounting relation, still not a causal multiplier.
+evaluator_notes: |
+  Definition/identity trap. Fail "identity ⇒ causal one-for-one."
+assumptions:
+  - Closed-economy national accounts; S = I as an identity for realized
+    flows.
+validation_steps:
+  - Distinguish identity from a behavioral schedule.
+  - Allow output or the interest rate to adjust.
+  - Reject automatic one-for-one investment scoring.

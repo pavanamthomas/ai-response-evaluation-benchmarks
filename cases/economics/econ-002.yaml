@@ -1,0 +1,63 @@
+id: ECON-002
+domain: economics
+title: Cities that raised the minimum wage had higher employment
+prompt: |
+  Across 40 cities, those that raised the local minimum wage between 2015 and
+  2019 had, on average, 1.8 percentage points higher employment-to-population
+  ratios in 2019 than cities that did not. There is no other information. A
+  briefing asks: does this show that raising the minimum wage increased
+  employment? Give a yes/no and the identifying argument.
+candidate_response: |
+  Yes. The comparison is exactly a treatment-control contrast: treated cities
+  have higher employment. If the wage floor reduced jobs, treated cities would
+  have lower employment. They do not, so the policy increased employment by
+  about 1.8 percentage points. This is the difference-in-differences spirit
+  even without a pre-period, because non-adopters are the control group.
+  Policymakers can treat 1.8 points as the employment gain from adoption.
+verdict: fail
+error_classification:
+  - correlation/causation
+severity: CRITICAL
+earliest_failure_point: causal validity
+explanation: |
+  A cross-sectional gap between adopters and non-adopters is not an employment
+  effect of the wage floor. Cities that raise minima are selected (income,
+  politics, labor demand). The candidate upgrades association to causation and
+  then to a policy parameter. That is false identification, hence CRITICAL.
+corrected_reasoning: |
+  Answer no. The 1.8 point gap is an associational contrast. Without a
+  pre-period, without parallel-trends content, and without a design for
+  selection into adoption, it does not identify ATT or ATE. Non-adopters are
+  not a demonstrated control group.
+golden_response: |
+  No. The 1.8 percentage point gap does not show that raising the minimum wage
+  increased employment.
+
+  The object in the briefing is a 2019 cross-sectional difference between
+  cities that adopted a higher floor and cities that did not. Let D be
+  adoption and Y the employment ratio. The number is E[Y|D=1] - E[Y|D=0],
+  which equals ATT only under a selection-on-observables or as-if-random
+  assumption that the prompt does not supply. High-employment, high-income,
+  or politically left cities may both adopt and have higher E[Y]. Reverse
+  causation (tight labor markets encouraging a higher floor) is also open.
+
+  Calling non-adopters a "control group" does not create difference-in-
+  differences. DiD requires a pre-period path for untreated potential
+  outcomes, not a single cross section. There is no pre-period here.
+
+  What would be needed is a design: event study around adoption, a border
+  discontinuity, or a synthetic control, plus a stated estimand (ATT for
+  adopting cities, not a national ATE). Until then, the briefing should
+  report that adopters had higher 2019 employment, not that the policy
+  caused a 1.8 point gain. Do not ship 1.8 points as a planning parameter.
+evaluator_notes: |
+  A candidate who says "not identified" and lists selection and missing
+  pre-trends should pass even without naming a specific estimator. Policy
+  certainty on 1.8 points is the CRITICAL trigger.
+assumptions:
+  - The 1.8 point figure is a raw mean difference as stated.
+  - No additional quasi-experimental detail is hidden in the prompt.
+validation_steps:
+  - Confirm the candidate's yes/no; the correct call is no.
+  - Check that association is not relabeled as DiD without a time dimension.
+  - Check that 1.8 is not treated as an ATT for planning.

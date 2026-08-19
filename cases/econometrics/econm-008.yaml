@@ -1,0 +1,73 @@
+id: ECONM-008
+domain: econometrics
+title: Fuzzy RDD scholarship cutoff with LATE stated
+prompt: |
+  A merit scholarship is offered if a high-school exam score exceeds 70.
+  Take-up is 0.12 just below 70 (small discretionary awards) and 0.78 just
+  above. A local linear fuzzy RDD of log first-year college GPA on the
+  indicator above 70, instrumented through the cutoff, with bandwidth 8
+  points chosen by a coverage-error procedure, yields 0.06. Density at the
+  cutoff looks continuous on a McCrary-style plot; predetermined covariates
+  are balanced. Interpret the 0.06 and list the main threats you would still
+  check.
+candidate_response: |
+  Under continuity of mean potential outcomes in the running variable and
+  a jump in treatment probability at 70, the fuzzy RDD estimand is LATE for
+  students whose scholarship receipt is switched by the cutoff (compliers
+  in a neighborhood of 70). The 0.06 is therefore an approximately 6 percent
+  effect on first-year GPA for those compliers, not the ATE for all test
+  takers and not the effect of college quality more broadly.
+
+  I would still check: (i) donut and alternative bandwidths; (ii) whether
+  the cutoff was used for other programs (compound treatments); (iii)
+  manipulation more carefully than a single density plot (bunching in the
+  histogram, McCrary test); (iv) first-stage size 0.78 − 0.12 = 0.66, which
+  is strong locally; (v) that GPA is not differentially measured across
+  the cutoff. I would not brief this as the national return to "aid."
+
+  Assumptions: no precise manipulation, local monotonicity, exclusion of
+  the cutoff except through aid. Limitation: local LATE does not travel to
+  a nationwide lowering of the threshold or to inframarginal high scorers.
+verdict: pass
+error_classification:
+  - none
+severity: PASS
+earliest_failure_point: none
+explanation: |
+  The candidate names fuzzy-RDD LATE, the complier group, localness, and a
+  sensible diagnostic list. No false ATE or policy scale-up. This is an
+  accepted examination answer.
+corrected_reasoning: |
+  No material correction. Optional: write the Wald ratio explicitly as the
+  jump in GPA over the jump in take-up.
+golden_response: |
+  The parameter identified by a fuzzy regression discontinuity at score 70,
+  given a continuous running variable and a discontinuous treatment
+  probability, is a local LATE: the mean difference in log GPA caused by
+  scholarship receipt for students near 70 whose aid is switched by the
+  cutoff. With take-up 0.12 below and 0.78 above, the first-stage jump is
+  0.66; the reported 0.06 is the reduced-form jump in log GPA divided by
+  that first stage in the local linear implementation. It is about a 6
+  percent GPA effect for those compliers, not ATE.
+
+  The prompt's continuous density sketch and covariate balance are
+  supportive but not conclusive. Remaining checks: other policies sharing
+  the same cutoff; donut RDD if score heaping exists; bandwidth and kernel
+  sensitivity; outcome manipulation (grade reporting); and monotonicity
+  (no large group that loses aid by crossing 70).
+
+  A ministry should not treat 0.06 as the effect of expanding aid far from
+  70 or as the effect of college quality. Those are different estimands.
+
+  Limitation: local linear RDD is a local approximation; if the CEF is
+  badly curved inside bandwidth 8, bias remains.
+evaluator_notes: |
+  Passing fixture. Fail only if a candidate upgrades this to national ATE
+  or ignores fuzziness.
+assumptions:
+  - Continuity of mean potential outcomes at the cutoff.
+  - Local monotonicity and exclusion of the cutoff except through aid.
+validation_steps:
+  - Confirm LATE, not ATE.
+  - Confirm fuzziness is used (Wald / first-stage jump).
+  - Confirm remaining manipulation and compound-treatment checks.

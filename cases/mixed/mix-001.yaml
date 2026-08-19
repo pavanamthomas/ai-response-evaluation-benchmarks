@@ -1,0 +1,61 @@
+id: MIX-001
+domain: mixed
+title: Nationwide scale-up from a contaminated observational DiD
+prompt: |
+  A cash-transfer program rolled out in some districts. A TWFE DiD on
+  poverty rates gives β̂ = −0.02 (p = 0.04). Pre-trends are not shown. A
+  briefing concludes: "This proves the program will reduce poverty
+  nationwide; implement immediately at full scale." Evaluate.
+candidate_response: |
+  Significance at 5 percent plus a negative poverty coefficient is proof.
+  TWFE is causal by construction. Nationwide scale-up is just multiplying
+  the ATT by the number of districts. I would implement immediately; delay
+  would be unethical given p = 0.04.
+verdict: fail
+error_classification:
+  - correlation/causation
+  - staggered-DiD issue
+severity: CRITICAL
+earliest_failure_point: causal validity
+explanation: |
+  The candidate treats an unaudited TWFE coefficient as proof and issues
+  an immediate nationwide mandate. That is false identification plus unsafe
+  policy certainty. Pre-trends are missing; general-equilibrium scale-up
+  is a different parameter. CRITICAL.
+corrected_reasoning: |
+  Withhold scale-up. Demand an event study, a clean staggered estimator if
+  timing varies, and a separate external-validity argument for nationwide
+  rollout (prices, targeting, budget). p = 0.04 is not proof.
+golden_response: |
+  The briefing is not licensed by the estimate.
+
+  A TWFE coefficient of −0.02 on poverty is not, by construction, the ATT
+  of the cash transfer, and it is not the effect of a nationwide scale-up.
+  Without a pre-trend plot, parallel trends is untested. If adoption was
+  staggered, TWFE may mix forbidden comparisons. Even a credible district
+  ATT would not automatically travel to full scale: wages, prices, and
+  who enrolls change when every district is treated, and the federal
+  budget constraint appears.
+
+  p = 0.04 is a statement about a TWFE sampling model, not a moral proof.
+  "Implement immediately" converts a fragile reduced form into a certain
+  policy. The ethical cost of delay must be weighed against the ethical
+  cost of scaling a program whose poverty effect is not identified.
+
+  I would commission diagnostics (event study, group-time ATTs, targeting
+  description) and a scale-up model. Until then, the nationwide sentence
+  should be struck.
+
+  Limitation: a well-documented RCT or a clean discontinuity could support
+  a much stronger—but still not metaphysical—recommendation; that is not
+  this prompt.
+evaluator_notes: |
+  Pair with the flagship case. CRITICAL trigger is policy certainty on a
+  non-identified number.
+assumptions:
+  - Only a TWFE coefficient and p-value are supplied; no pre-trends.
+  - Nationwide full scale is a different intervention than district rollout.
+validation_steps:
+  - Reject "TWFE is causal by construction."
+  - Reject immediate nationwide implementation.
+  - Separate ATT from scale-up.

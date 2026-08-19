@@ -1,0 +1,67 @@
+id: STAT-008
+domain: statistics
+title: Pre-registered A/B test with MDE and clustering
+prompt: |
+  A platform randomizes a checkout-button color at the user level. The
+  pre-registered primary outcome is purchase within 7 days. Users can have
+  multiple sessions; inference will cluster by user. The team asks whether
+  this is a sound experimental design and what must be in the analysis
+  plan. Sample size was set for 80 percent power at a 0.4 percentage point
+  lift, two-sided 5 percent.
+candidate_response: |
+  Yes: randomization is at the unit that receives the color, the outcome is
+  pre-registered, and clustering by user matches the dependence from
+  multiple sessions. The analysis plan should estimate the user-level
+  difference in means (or a saturated regression on the assignment dummy),
+  cluster standard errors by user, and not promote secondary metrics to
+  the primary claim after seeing results. The MDE of 0.4 points is the
+  effect the sample was powered to detect, not a Bayesian posterior. If
+  the realized effect is 0.1 points with a tight interval around it, that
+  is a precisely estimated small effect, not a "failed experiment" in the
+  sense of no information.
+
+  Assumptions: no interference across users, compliance with assignment,
+  and that 7-day purchase is observed for all in the window. Limitation:
+  a site-wide color change could have equilibrium effects not identified
+  from a partial roll-out.
+verdict: pass
+error_classification:
+  - none
+severity: PASS
+earliest_failure_point: none
+explanation: |
+  The candidate matches design to assignment, respects pre-registration,
+  clusters at the right level, and does not confuse MDE with posterior
+  magnitude. Limitations are stated. Passing fixture.
+corrected_reasoning: |
+  No material correction. Optional: mention checking balance and a
+  pre-period outcome as a placebo.
+golden_response: |
+  The design is sound for the partial-rollout question it asks: the effect
+  of assignment to a color on a user's 7-day purchase probability.
+
+  Randomization at user level, a single pre-registered primary outcome, and
+  clustering by user are aligned. Multiple sessions are not independent
+  Bernoulli trials. The analysis plan should be the assignment-dummy
+  contrast with user-clustered errors (or a randomization inference at
+  user level), with secondary outcomes clearly labeled. Sample size for
+  80 percent power at a 0.4 point lift justifies the experiment; it does
+  not mean that smaller effects are "insignificant hence zero."
+
+  Remaining assumptions: SUTVA (users do not treat spillovers as part of
+  the object), actual delivery of the color, and complete 7-day follow-up.
+  A full-population recolor could move norms or seller behavior in ways
+  this experiment will not see.
+
+  I would not add unregistered outcomes to the headline. A pre-period
+  purchase placebo is a useful but optional diagnostic.
+evaluator_notes: |
+  Passing fixture STAT-008. Fail if they shuffle-split sessions or treat
+  MDE as the only interesting effect size.
+assumptions:
+  - User-level randomization; clustered sessions.
+  - Pre-registered primary outcome as stated.
+validation_steps:
+  - Cluster by user, not by session.
+  - Keep the primary outcome fixed.
+  - Interpret MDE as a design parameter, not a posterior.

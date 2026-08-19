@@ -1,0 +1,61 @@
+id: ECONM-006
+domain: econometrics
+title: Log-wage schooling coefficient read in dollars
+prompt: |
+  The estimated equation is log(wage) = 2.10 + 0.08 educ + 0.03 exper −
+  0.0005 exper^2, with wage in dollars per hour and educ in years. A note
+  says: "Each additional year of school raises the wage by 8 cents, or by
+  0.08 dollars." Correct the interpretation and give the approximate percent
+  effect at the mean.
+candidate_response: |
+  The note is right: the dependent variable's name is wage, and 0.08 is the
+  coefficient, so the unit is dollars. Log is a variance-stabilizing
+  transformation that does not change units once we estimate. At a mean wage
+  of 20, eight cents is 0.4 percent, which is small, but the regression says
+  8 cents regardless of the mean.
+verdict: fail
+error_classification:
+  - wrong regression interpretation
+severity: MAJOR
+earliest_failure_point: conceptual correctness
+explanation: |
+  A coefficient of 0.08 on educ in a log(wage) equation is an approximate
+  8 percent wage difference per year of school, not 0.08 dollars. The
+  candidate's unit error changes the object by an order of magnitude at
+  typical wages. MAJOR.
+corrected_reasoning: |
+  For small β, 100 × β is the approximate percent difference: about 8 percent
+  per year (more precisely 100 × (e^{0.08} − 1) ≈ 8.3 percent). The 8-cent
+  reading is wrong.
+golden_response: |
+  The note misreads the functional form. In
+
+  log(wage) = α + 0.08 educ + …,
+
+  the partial derivative is ∂ log(wage)/∂ educ = 0.08, which is a
+  semi-elasticity: a one-year difference in educ is associated with about
+  an 8 percent difference in the wage level, holding the other included
+  variables fixed. The exact finite difference is
+  100 × (exp(0.08) − 1) ≈ 8.33 percent, not 0.08 dollars.
+
+  A log transformation is not a "variance stabilizer that cancels in the
+  coefficient's units." The left-hand side is log dollars, so the
+  coefficient is unit-free with respect to the currency, not a dollar
+  amount. At a mean wage of 20, 8 percent is about 1.60 dollars per hour,
+  twenty times the 8-cent claim.
+
+  This remains an associational slope unless a design identifies it. The
+  present question asked only for the correct reading of 0.08.
+
+  Limitation: if educ were itself in logs, 0.08 would be an elasticity;
+  it is not.
+evaluator_notes: |
+  Classic log-level trap. Fail even if they later mention percent but keep
+  the 8-cent sentence as the headline.
+assumptions:
+  - The specified equation is log-level in educ.
+  - Wage is a positive hourly dollar amount.
+validation_steps:
+  - Translate 0.08 into an 8 percent (or 8.3 percent) statement.
+  - Reject 0.08 dollars.
+  - Optionally compute exp(0.08) − 1.

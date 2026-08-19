@@ -1,0 +1,72 @@
+id: ECONM-007
+domain: econometrics
+title: Compulsory-schooling LATE treated as ATE for a universal subsidy
+prompt: |
+  An instrument based on a compulsory-schooling age reform yields a 2SLS
+  return to schooling of 0.11 in log wages. OLS is 0.07. The first-stage F
+  is 18, and a narrative argues exclusion is plausible for that reform. A
+  memo concludes: "Therefore the average return for all students is 11
+  percent, and a universal tertiary-school subsidy will raise wages by 11
+  percent per extra year for every student." Assess the leap from the
+  estimate to the policy.
+candidate_response: |
+  Valid IV plus a strong first stage identifies the average treatment effect.
+  LATE is just jargon for ATE when we have a binary instrument. The 11 percent
+  applies to every student, including those who would attend university
+  anyway. A universal subsidy should be scored at 11 percent per year. The
+  OLS–IV gap shows OLS is downward biased, so 11 percent is conservative for
+  inframarginal students as well.
+verdict: fail
+error_classification:
+  - wrong regression interpretation
+severity: MAJOR
+earliest_failure_point: conceptual correctness
+explanation: |
+  Under Imbens–Angrist conditions a binary instrument identifies LATE for
+  compliers whose schooling changes with the compulsory-age rule, not ATE
+  and not the return to a tertiary subsidy for inframarginal students. The
+  memo scores the wrong estimand and the wrong treatment. Exclusion may be
+  fine for the reform and still fail to travel to the subsidy.
+corrected_reasoning: |
+  Read 0.11 as LATE for compulsory-schooling compliers, typically people
+  constrained at the age-of-exit margin, not as ATE and not as the return
+  to university for always-takers. Score a tertiary subsidy only with a
+  design that moves that margin, or with an explicit external-validity
+  argument.
+golden_response: |
+  Grant, for this prompt, relevance (F = 18) and exclusion for the
+  compulsory-age reform. What is identified is still not "the average return
+  for all students."
+
+  With a binary instrument Z, monotonicity, independence, exclusion, and a
+  first stage, 2SLS identifies LATE: the mean log-wage return to the extra
+  schooling induced by Z among compliers. Compliers with a school-leaving-age
+  reform are not a random slice of all students and are typically not the
+  students who will be inframarginal at a university subsidy. LATE is not
+  jargon for ATE; ATE additionally requires homogeneous returns or a design
+  that moves everyone.
+
+  A universal tertiary subsidy is a different treatment (tuition, not
+  compulsory age) and a different population. Scoring it at 11 percent per
+  year for every student confuses estimands and confuses policies. The
+  OLS–IV gap (0.07 vs 0.11) is consistent with LATE exceeding the OLS
+  mixture, with measurement error, or with different weights; it does not
+  prove that 0.11 is a lower bound for always-takers.
+
+  The memo should say: 11 percent is a complier LATE for this reform, not a
+  budget parameter for a university subsidy. Either find variation that
+  shifts tertiary enrollment or state that external validity is untested.
+
+  Limitation: without defiers, LATE is a well-defined mean; with defiers,
+  even that reading fails.
+evaluator_notes: |
+  PhD-level estimand trap. Do not also ding exclusion unless the candidate
+  invents a new instrument problem; the prompt granted a narrative for the
+  original reform.
+assumptions:
+  - Imbens–Angrist conditions hold for the compulsory-age instrument.
+  - The proposed policy is a universal tertiary subsidy, not the reform Z.
+validation_steps:
+  - Name LATE and the complier population.
+  - Reject ATE and "every student."
+  - Reject scoring the tertiary subsidy at 0.11 without a new design.

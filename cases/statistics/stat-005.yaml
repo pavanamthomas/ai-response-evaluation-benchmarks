@@ -1,0 +1,59 @@
+id: STAT-005
+domain: statistics
+title: Union probability with overlapping recession indicators
+prompt: |
+  Let A be "manufacturing PMI below 50" and B be "inverted yield curve,"
+  each with P(A) = P(B) = 0.30 in a historical quarterly sample. A risk
+  memo computes P(A or B) = 0.60 as the probability of a recession warning.
+  The two indicators are positively dependent in the same sample. Is 0.60
+  justified?
+candidate_response: |
+  The addition rule is P(A ∪ B) = P(A) + P(B) = 0.60. Dependence does not
+  matter for unions, only for intersections in Bayes. I would brief 60
+  percent as the warning probability.
+verdict: fail
+error_classification:
+  - probability error
+severity: MAJOR
+earliest_failure_point: mathematical correctness
+explanation: |
+  The addition rule without subtracting the intersection double-counts
+  quarters where both flags fire. Positive dependence makes P(A ∩ B) larger,
+  so 0.60 is an upper bound, not the probability. The memo's number is
+  wrong.
+corrected_reasoning: |
+  P(A ∪ B) = P(A) + P(B) − P(A ∩ B) ≤ 0.60, with equality only if A and B
+  are disjoint. Positive dependence implies a strictly smaller union
+  probability than 0.60 unless the intersection is zero, which it is not
+  if both can occur together.
+golden_response: |
+  0.60 is not justified as P(A ∪ B).
+
+  For any two events, P(A ∪ B) = P(A) + P(B) − P(A ∩ B). Dropping the
+  intersection is valid only if A and B cannot occur together. The memo
+  states that the indicators are positively dependent, so they do occur
+  together, P(A ∩ B) > P(A)P(B) = 0.09, and the union is strictly less
+  than 0.60. Fréchet bounds give 0.30 ≤ P(A ∪ B) ≤ 0.60; positive
+  dependence pushes the union below the independent benchmark 0.51 as
+  well as below 0.60.
+
+  Also, P(A ∪ B) is the probability that at least one indicator fires, not
+  the probability of a recession. That is a separate calibration problem.
+
+  I would not brief 60 percent. Estimate P(A ∩ B) in the same quarterly
+  sample and apply the inclusion-exclusion formula, or estimate the union
+  frequency directly.
+
+  Limitation: historical frequencies are not a structural recession
+  probability under a changed monetary regime; that does not rescue the
+  0.60 arithmetic.
+evaluator_notes: |
+  Catch the missing intersection. Mentioning Fréchet bounds is extra credit,
+  not required.
+assumptions:
+  - P(A) = P(B) = 0.30; A and B can occur in the same quarter.
+  - Positive dependence in the sample.
+validation_steps:
+  - Write inclusion-exclusion.
+  - Conclude P(A ∪ B) < 0.60.
+  - Separate indicator union from recession probability.

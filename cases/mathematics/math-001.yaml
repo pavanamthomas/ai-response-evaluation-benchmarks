@@ -1,0 +1,48 @@
+id: MATH-001
+domain: mathematics
+title: Compound growth computed as 5 percent times ten
+prompt: |
+  A project costs 100 today and pays 163 in ten years. The alternative is
+  to invest at 5 percent per year, compounded annually. Is the project's
+  NPV at this 5 percent opportunity cost positive? Show the terminal-value
+  comparison or the discounted NPV.
+candidate_response: |
+  Five percent times ten years is 50 percent, so 100 grows to 150. The
+  project pays 163 > 150, so NPV is positive. Compounding is a second-order
+  adjustment I will ignore.
+verdict: fail
+error_classification:
+  - arithmetic error
+severity: MAJOR
+earliest_failure_point: mathematical correctness
+explanation: |
+  (1.05)^10 ≈ 1.6289, so 100 grows to about 162.89. The project pays 163,
+  so NPV is essentially zero, not clearly positive. Using 1.50 changes the
+  accept/reject call. That is an arithmetic (compounding) error, MAJOR.
+corrected_reasoning: |
+  Compare 163 to 100 × (1.05)^10 ≈ 162.89, or compute NPV =
+  −100 + 163 / (1.05)^10 ≈ 0.07, indistinguishable from zero at any
+  sensible rounding. Do not linearize compounding as 5% × 10.
+golden_response: |
+  Annual compounding at 5 percent turns 100 into 100 × (1.05)^10.
+  (1.05)^2 = 1.1025, (1.05)^4 ≈ 1.2155, (1.05)^8 ≈ 1.4775, and
+  (1.05)^10 = (1.05)^8 × (1.05)^2 ≈ 1.6289. The opportunity-cost terminal
+  value is about 162.89. The project pays 163, so NPV at 5 percent is
+  about −100 + 163/1.6289 ≈ 0.07, which is zero for practical purposes.
+
+  The linear shortcut 5% × 10 = 50% understates the opportunity cost
+  (150 instead of 163) and would wrongly accept a project that merely
+  matches the alternative. Compounding is first-order over a decade, not
+  a second-order polish.
+
+  Limitation: if compounding were continuous at 5 percent, 100 e^{0.5} ≈
+  164.9 and the project would have slightly negative NPV; the prompt
+  specified annual compounding.
+evaluator_notes: |
+  Arithmetic-error trap. Require (1.05)^10, not 1.50.
+assumptions:
+  - Annual compounding at 5 percent; certain cash flows as stated.
+validation_steps:
+  - Compute (1.05)^10 ≈ 1.6289.
+  - Compare 163 with 162.89.
+  - Reject the 150 benchmark.

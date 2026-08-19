@@ -1,0 +1,55 @@
+id: STAT-006
+domain: statistics
+title: Base-rate neglect in a screening test
+prompt: |
+  A condition affects 1 percent of a population. A test is 99 percent
+  sensitive and 99 percent specific. A person tests positive. What is
+  P(condition | positive)? Approximate is fine if you show the table.
+candidate_response: |
+  Sensitivity is 99 percent, so a positive test means a 99 percent chance
+  of having the condition. Specificity being 99 percent confirms the same
+  number. Base rates are for unmatched samples; once we have the test they
+  drop out. I would tell the person they almost certainly have the condition.
+verdict: fail
+error_classification:
+  - Bayes error
+severity: MAJOR
+earliest_failure_point: statistical correctness
+explanation: |
+  The candidate reports P(positive | condition) as if it were
+  P(condition | positive). With a 1 percent base rate the posterior is
+  about 50 percent, not 99 percent. That changes counseling and any
+  expected-cost calculation.
+corrected_reasoning: |
+  Use Bayes or a 10,000-person table: 100 true cases, 99 true positives;
+  9,900 non-cases, 99 false positives; posterior 99/(99+99) = 1/2.
+golden_response: |
+  P(condition | positive) is about 50 percent, not 99 percent.
+
+  Let C be the condition and T+ a positive test. Given P(C) = 0.01,
+  P(T+|C) = 0.99, P(T+|C^c) = 0.01,
+
+  P(C|T+) = P(T+|C)P(C) / [P(T+|C)P(C) + P(T+|C^c)P(C^c)]
+          = (0.99)(0.01) / [(0.99)(0.01) + (0.01)(0.99)] = 0.50.
+
+  In a population of 10,000, about 100 people have C and 99 of them test
+  positive; about 99 of the 9,900 without C also test positive. Half of
+  positives are false positives.
+
+  Sensitivity does not "overwrite" the base rate. I would not tell the
+  person they almost certainly have the condition; a confirmatory test or
+  a decision analysis with losses is the next step.
+
+  Limitation: if the person was already selected from a high-prevalence
+  clinic, the relevant base rate is not 1 percent; that must be stated,
+  not ignored.
+evaluator_notes: |
+  Classic Bayes trap. The exact 50 percent is the target; 0.5 vs 0.99 is
+  the material gap.
+assumptions:
+  - Prevalence 1 percent; sensitivity and specificity 99 percent.
+  - The person is a random member of that population until the test.
+validation_steps:
+  - Compute the posterior ≈ 0.50.
+  - Reject 0.99.
+  - Show a count table or Bayes formula.

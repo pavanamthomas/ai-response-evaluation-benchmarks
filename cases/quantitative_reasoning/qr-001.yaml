@@ -1,0 +1,58 @@
+id: QR-001
+domain: quantitative_reasoning
+title: Log GDP in billions read as if it were millions
+prompt: |
+  A regression uses log(GDP) as the outcome, where GDP is recorded in
+  billions of currency units. A coefficient of 0.03 on a policy dummy is
+  interpreted in a memo as "GDP rises by 0.03 million, i.e. 30,000 units
+  of currency." The mean GDP in the sample is 200 billion. Correct the
+  quantitative claim.
+candidate_response: |
+  Log coefficients are levels. 0.03 on log(GDP) is 0.03 million because
+  the table footer said "millions" in an earlier draft I remember. At a
+  mean of 200 billion that is negligible, but the memo's 30,000 is the
+  right translation of 0.03 million. Units of the left-hand side do not
+  affect log coefficients.
+verdict: fail
+error_classification:
+  - unit error
+severity: CRITICAL
+earliest_failure_point: conceptual correctness
+explanation: |
+  A 0.03 coefficient on log(GDP) is about a 3 percent effect, which at
+  200 billion is about 6 billion, not 30,000. Mixing millions, billions,
+  and logs changes the claim by orders of magnitude. CRITICAL because a
+  planner using 30,000 would mis-size the policy by a factor of 200,000.
+corrected_reasoning: |
+  100 × (e^{0.03} − 1) ≈ 3.05 percent of GDP. At 200 billion that is about
+  6.1 billion currency units. Logs erase the billion/million scale in the
+  coefficient, which is a percent, not a million-unit increment.
+golden_response: |
+  The memo's 30,000 figure is a unit error.
+
+  If the outcome is log(GDP), a dummy coefficient 0.03 is a log-point
+  (approximately 3 percent) difference associated with the policy, holding
+  other included variables fixed. It is not 0.03 million and not 0.03
+  billion. The billion-versus-million scale of GDP cancels inside the log
+  (up to an additive constant that the dummy does not change).
+
+  At a sample mean of 200 billion, 3 percent is 6 billion. More tightly,
+  200 × (e^{0.03} − 1) ≈ 6.09 billion. Compared with 30,000, the memo is
+  off by a factor of about 2 × 10^5.
+
+  I would not brief 30,000. Report "~3 percent of GDP, about 6 billion at
+  the sample mean," and keep the usual causal caveats separate from the
+  unit correction.
+
+  Limitation: if GDP were already in logs of millions and someone added
+  0.03 as a level, that would be a second, different mistake; the prompt
+  is a log outcome.
+evaluator_notes: |
+  Catch millions/billions plus log-as-level. CRITICAL for the size of the
+  mis-scaling.
+assumptions:
+  - Outcome is log(GDP) with GDP in billions; mean GDP = 200 billion.
+validation_steps:
+  - Translate 0.03 into ~3 percent.
+  - Convert to ~6 billion at the mean.
+  - Reject 30,000.

@@ -1,0 +1,64 @@
+id: ECONM-003
+domain: econometrics
+title: DiD with already-visible pre-trends
+prompt: |
+  A two-period-looking event study for a 2016 state tax reform, estimated
+  with state and year effects, shows lead coefficients of −0.04 and −0.06
+  (years −2 and −1) and a contemporaneous coefficient of −0.05 on log
+  employment. All three estimates have similar standard errors. The author
+  says parallel trends is a levels assumption absorbed by state effects, so
+  the −0.05 is ATT. Evaluate.
+candidate_response: |
+  State fixed effects remove any pre-existing gap, so parallel trends is
+  automatically satisfied. The leads are part of a causal trend toward the
+  reform; they show the tax cut was anticipated, which still belongs in the
+  treatment effect. ATT is −0.05. I would ignore the leads in the table of
+  main results.
+verdict: fail
+error_classification:
+  - incorrect DiD parallel-trends
+severity: CRITICAL
+earliest_failure_point: causal validity
+explanation: |
+  Parallel trends is an assumption on untreated potential outcomes, not a
+  consequence of state effects. Leads of the same size as the event-time
+  zero coefficient mean the design is already failing. Anticipation, if
+  real, requires a redefined treatment time; it does not license dropping
+  the leads. False ATT claim.
+corrected_reasoning: |
+  Do not report −0.05 as ATT. Pre-trends of −0.04 and −0.06 reject a
+  credible no-anticipation plus parallel-trends package for this
+  specification. Either recode event time to the anticipation date and
+  test the new leads, or treat the path as descriptive.
+golden_response: |
+  The −0.05 coefficient is not identified as ATT on the evidence given.
+
+  Two-way fixed effects subtract state means and year means. They do not
+  make untreated employment in treated and comparison states travel in
+  parallel. Parallel trends is an extra assumption on Y(0). The event-study
+  leads are the usual check of that assumption (and of no anticipation).
+  Here the leads are −0.04 and −0.06 against an event-time coefficient of
+  −0.05: the pre-period already moves by as much as the "effect."
+
+  Anticipation is not a reason to ignore leads. If firms adjust in −2 and
+  −1, the treatment date in the regression is wrong, and post-minus-pre
+  comparisons mix pre-reform dynamics with the reform. The honest ATT, if
+  any, would use a re-timed event study whose new leads are flat.
+
+  I would not take −0.05 to a revenue or employment brief as the effect of
+  the 2016 reform. The figure is a description of a declining path that
+  continues through 2016.
+
+  Limitation: a covariate-conditional parallel-trends story could be tried,
+  but it must flatten the leads, not merely be asserted because α_s is in
+  the regression.
+evaluator_notes: |
+  Pair with the flagship case. The distinctive defect here is pre-trends,
+  not staggered negative weights.
+assumptions:
+  - Reported leads are estimated under the same TWFE event-study design.
+  - Comparison states are the implied untreated group.
+validation_steps:
+  - Compare lead magnitudes to the event-time coefficient.
+  - Reject "fixed effects imply parallel trends."
+  - Reject dropping leads as a robustness step.

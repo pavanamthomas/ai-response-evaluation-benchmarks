@@ -1,0 +1,67 @@
+id: ECONM-004
+domain: econometrics
+title: Staggered TWFE interpreted as ATT under HTE
+prompt: |
+  States adopt a licensing reform in 2010, 2014, or 2018; some never adopt
+  through 2019. TWFE of log employment on a post-adoption dummy, with state
+  and year effects, yields β̂ = −0.04. Early adopters' event-study post
+  coefficients fade toward zero; late adopters' post coefficients are more
+  negative. The author calls β̂ the ATT of licensing reform. Assess.
+candidate_response: |
+  Staggered adoption is why we use TWFE: it is DiD with many timing groups.
+  Heterogeneity is averaged into the overall ATT, which is what β̂ is. Early
+  fade-out and late negative effects are exactly why an average is needed.
+  Negative weights are a theoretical curiosity when N is large. I would
+  brief the cabinet that licensing reduced employment by 4 percent.
+verdict: fail
+error_classification:
+  - staggered-DiD issue
+severity: CRITICAL
+earliest_failure_point: causal validity
+explanation: |
+  Under staggered adoption and heterogeneous treatment effects, TWFE is not
+  a non-negatively weighted average of group-time ATTs. Already-treated
+  units become controls; weights can be negative. The prompt's HTE pattern
+  is the canonical warning. Briefing −4 percent as ATT is false
+  identification. Known fixture CRITICAL.
+corrected_reasoning: |
+  Treat β̂ as an uninterpretable mixture until a Goodman-Bacon decomposition
+  and a group-time ATT estimator are shown. If already-treated comparisons
+  carry weight, do not sign the employment effect from TWFE.
+golden_response: |
+  β̂ = −0.04 from staggered TWFE is not, in this design, the ATT of licensing
+  reform.
+
+  With multiple adoption dates and treatment effects that vary by cohort and
+  by time since adoption, the TWFE coefficient is a weighted sum of two-by-two
+  DiD comparisons, including treated-versus-already-treated comparisons.
+  Those weights can be negative. Early adopters whose effects fade toward
+  zero are especially dangerous as controls for later adopters: the control
+  path still contains a treatment path.
+
+  The pattern in the prompt—flat or fading early-adopter post effects, more
+  negative late-adopter effects—is precisely when the TWFE mixture can
+  disagree in sign or magnitude with any economically named average of
+  ATT(g, t).
+
+  A cabinet brief should withhold the 4 percent figure. Next steps: Bacon
+  decomposition; group-time ATTs with never-treated or not-yet-treated
+  controls and explicit aggregation weights; event studies that do not use
+  already-treated as controls. If those aggregations are unstable or if
+  pre-trends fail, the employment effect is not identified from this panel.
+
+  Nationwide external validity would be a further, separate problem even
+  after a credible ATT(g, t) table.
+
+  Limitation: if effects were homogeneous and constant, TWFE would recover
+  that common effect; the prompt states that they are not.
+evaluator_notes: |
+  Known fixture ECONM-004. Align with FLAGSHIP_REVIEW_CASE.md. Reward
+  negative weights and forbidden comparisons by name.
+assumptions:
+  - Staggered binary adoption with never-treated states.
+  - Treatment effects heterogeneous across cohorts and event time.
+validation_steps:
+  - Refuse to label TWFE β as ATT under the stated HTE.
+  - Name already-treated controls or negative weights.
+  - Withhold the 4 percent policy sentence.

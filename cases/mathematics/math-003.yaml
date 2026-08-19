@@ -1,0 +1,51 @@
+id: MATH-003
+domain: mathematics
+title: Reported profit maximum outside the feasible set
+prompt: |
+  Maximize 5x + 4y subject to x + 2y ≤ 10, 3x + y ≤ 12, x ≥ 0, y ≥ 0.
+  A submitted solution reports (x, y) = (5, 4) as the optimum because
+  "5 and 4 match the objective coefficients."
+candidate_response: |
+  The objective wants x = 5 and y = 4, the same numbers as the prices 5 and
+  4. Profit is 5*5 + 4*4 = 41. I did not check the inequalities because an
+  unconstrained intuition is enough in linear programs: put each variable
+  at its objective coefficient.
+verdict: fail
+error_classification:
+  - infeasible solution
+severity: CRITICAL
+earliest_failure_point: mathematical correctness
+explanation: |
+  (5, 4) violates both resource constraints (5 + 8 = 13 > 10 and 15 + 4 =
+  19 > 12). Reporting an infeasible point as the optimum is invalid
+  mathematics that changes the answer. Known fixture CRITICAL.
+corrected_reasoning: |
+  The feasible vertices are (0, 0), (4, 0), (0, 5), and the intersection of
+  x + 2y = 10 and 3x + y = 12, namely (14/5, 18/5) = (2.8, 3.6). Evaluate
+  5x + 4y at vertices: (4, 0) gives 20; (0, 5) gives 20; (2.8, 3.6) gives
+  28.4. Optimum (2.8, 3.6).
+golden_response: |
+  (5, 4) is not feasible: x + 2y = 13 > 10 and 3x + y = 19 > 12. A linear
+  program cannot have its maximum at an infeasible point. Matching decision
+  variables to objective coefficients has no basis.
+
+  For two inequalities in the first quadrant, the maximum of a linear
+  objective is at a vertex. Vertices: (0, 0); (4, 0) from 3x = 12, y = 0;
+  (0, 5) from 2y = 10, x = 0; and the crossing of x + 2y = 10 and
+  3x + y = 12. Solving, multiply the second by 2: 6x + 2y = 24, subtract
+  the first: 5x = 14, x = 14/5, y = 10 − 28/5 = 18/5. Objective values:
+  0; 20; 20; 5*(14/5) + 4*(18/5) = 14 + 72/5 = 142/5 = 28.4. The unique
+  optimum is (14/5, 18/5).
+
+  Always substitute a claimed solution back into every constraint.
+
+  Limitation: if the objective were unbounded on the feasible set there
+  would be no optimum; here the set is a compact polygon.
+evaluator_notes: |
+  Known fixture MATH-003. Infeasibility is the CRITICAL trigger.
+assumptions:
+  - Linear program as written; nonnegative variables.
+validation_steps:
+  - Plug (5, 4) into both inequalities and reject it.
+  - Evaluate vertices.
+  - Report (14/5, 18/5).

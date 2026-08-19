@@ -1,0 +1,63 @@
+id: ECON-004
+domain: economics
+title: Sign of the income effect on leisure
+prompt: |
+  In a static labor-leisure model, consumption and leisure are both normal,
+  the wage rises, and nonlabor income is fixed. A note claims: "The income
+  effect of the wage increase reduces leisure, so hours of work must rise;
+  backward-bending supply is impossible." Assess the claim and the sign of
+  the income effect on leisure.
+candidate_response: |
+  The claim is correct. A higher wage makes the worker richer, and richer
+  people consume more goods. Leisure is time not working, which is costly when
+  goods become more attractive, so the income effect on leisure is negative.
+  Hours therefore rise. Backward-bending labor supply would require leisure to
+  be inferior, which the note already rules out by calling goods normal.
+verdict: fail
+error_classification:
+  - wrong sign
+severity: MAJOR
+earliest_failure_point: conceptual correctness
+explanation: |
+  The candidate signs the income effect on leisure incorrectly. If leisure is
+  normal, higher full income raises leisure and reduces hours, opposing the
+  substitution effect. Backward-bending supply is the case where that income
+  effect dominates. The error changes the qualitative conclusion.
+corrected_reasoning: |
+  Decompose d(hours)/d(wage) into substitution (non-negative for hours) and
+  income. Normal leisure means the income effect on leisure is positive, so
+  the income effect on hours is negative. The net sign is ambiguous.
+golden_response: |
+  The claim is false, and the income effect of a wage increase on leisure is
+  **positive** when leisure is normal—not negative.
+
+  The wage change has a substitution effect and an income (wealth) effect.
+  Substitution: leisure becomes more expensive relative to consumption, so
+  compensated hours of work rise (or stay). Income: a higher wage expands
+  the feasible set (except at zero hours). If leisure is a normal good, the
+  worker takes more leisure when full income rises, which **reduces** hours.
+  Normal consumption does not make leisure inferior; both can be normal.
+
+  Backward-bending labor supply is precisely the region where the negative
+  income effect on hours dominates substitution. It does not require leisure
+  to be inferior. Inferior leisure would make the income effect reinforce
+  substitution, producing an always-upward supply curve.
+
+  Slutsky for hours h, with nonlabor income y and wage w, has the structure
+  ∂h/∂w |_{u} ≥ 0 and an income term whose sign tracks whether leisure is
+  normal. With y fixed and leisure normal, ∂h/∂w is ambiguous. The note's
+  last sentence should be reversed.
+
+  Limitation: this is static and ignores human capital, overtime constraints,
+  and household joint supply, any of which can change the empirical slope
+  without repairing the candidate's sign error.
+evaluator_notes: |
+  The trap is "richer people buy more goods, therefore they work more." Pass
+  only if the income effect on leisure is positive under normality.
+assumptions:
+  - Interior static labor-leisure choice; consumption and leisure normal.
+  - Nonlabor income fixed; wage increase uncompensated.
+validation_steps:
+  - Verify the signed income effect on leisure is positive under normality.
+  - Verify hours response is theoretically ambiguous.
+  - Reject "backward-bending requires inferior leisure."

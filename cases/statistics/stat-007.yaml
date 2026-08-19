@@ -1,0 +1,62 @@
+id: STAT-007
+domain: statistics
+title: One significant industry alpha among twenty tests
+prompt: |
+  A researcher tests 20 industry portfolios for nonzero intercepts in a
+  factor model, each at the 5 percent level, without a pre-registered
+  industry. Industry 7 has p = 0.04; the others are above 0.10. The note
+  says Industry 7 "has alpha" and stops. The note does not recommend a
+  trading mandate. Evaluate.
+candidate_response: |
+  p = 0.04 is below 0.05, so Industry 7 has alpha. Multiple testing is a
+  theoretical worry for huge data-mined panels, not for 20 standard
+  industries. I would title the section "Industry 7 alpha confirmed."
+verdict: fail
+error_classification:
+  - p-value error
+  - incomplete answer
+severity: MINOR
+earliest_failure_point: statistical correctness
+explanation: |
+  Twenty unadjusted 5 percent tests have a substantial family-wise false
+  positive chance (about 1 − 0.95^20 ≈ 0.64 under global null and
+  independence). Calling Industry 7 "confirmed" overstates. The candidate
+  does not urge a trading mandate, and the sign/direction of a possible
+  intercept is not the issue, so MINOR: the takeaway should be qualified,
+  not reversed into "there is definitely no alpha." Incomplete in not
+  reporting a multiple-testing correction.
+corrected_reasoning: |
+  Report the 20 p-values, note the selection, and apply a Bonferroni or
+  false-discovery-rate control, or pre-register a single test. Industry 7
+  is a hint, not a confirmation.
+golden_response: |
+  Industry 7 should not be labeled "alpha confirmed" on this protocol.
+
+  Twenty tests at 5 percent, chosen after looking at which p-value is small,
+  inflate the chance of at least one false rejection. Under a global null
+  and independent tests, P(at least one p < 0.05) ≈ 0.64. Bonferroni would
+  compare 0.04 with 0.05/20 = 0.0025; 0.04 does not survive. Less
+  conservative FDR control might still not call a single 0.04 among
+  nineteen unremarkable tests a discovery.
+
+  Multiple testing is not only a "big data" issue. Twenty industry
+  intercepts are a textbook family. The honest write-up lists all 20
+  intercepts, states that Industry 7 was the smallest p, and withholds
+  "confirmed."
+
+  No trading recommendation was made; none should be added. Even a
+  significant intercept after adjustment would still need economic costs,
+  tradability, and multiple-horizon robustness.
+
+  Limitation: dependence among industries changes the exact family-wise
+  error, not the fact that selection occurred.
+evaluator_notes: |
+  MINOR because there is no policy certainty and the single-test reading is
+  a common incomplete report rather than a fabricated study.
+assumptions:
+  - Twenty tests, one highlighted after seeing p-values.
+  - No pre-registered single industry.
+validation_steps:
+  - Note family-wise error or Bonferroni.
+  - Reject "confirmed" language.
+  - Do not invent a trading strategy.

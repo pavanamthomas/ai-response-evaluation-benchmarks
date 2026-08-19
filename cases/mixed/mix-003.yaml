@@ -1,0 +1,57 @@
+id: MIX-003
+domain: mixed
+title: Correct OLS algebra used as a causal wage law
+prompt: |
+  In the linear model y = xβ + u with E[x u] = 0 imposed as the OLS
+  population condition, a derivation shows β = E[x^2]^{-1} E[x y] when
+  x is scalar with E[x^2] > 0. The write-up then says: "therefore a
+  one-unit increase in x causes y to rise by β for every individual."
+  Assess the last sentence only, granting the algebra.
+candidate_response: |
+  The algebra is the causal model. OLS orthogonality is the definition of
+  no confounding, so β is an individual causal effect. I would keep the
+  last sentence.
+verdict: fail
+error_classification:
+  - technically correct but semantically wrong
+severity: MAJOR
+earliest_failure_point: causal validity
+explanation: |
+  The projection formula is technically correct for the linear projection
+  (or for a correctly specified linear CEF with E[x u] = 0). It does not
+  mean a one-unit increase in x causes y to rise by β for every person.
+  That semantic upgrade needs potential outcomes, no interference, and a
+  design or structural assumption. MAJOR.
+corrected_reasoning: |
+  Keep β = E[x^2]^{-1} E[x y] as the linear projection coefficient.
+  Rewrite the last sentence as: a one-unit difference in x is associated
+  with a β difference in the linear projection of y on x. Causal language
+  requires more.
+golden_response: |
+  The displayed formula is the population OLS/linear-projection slope
+  under E[x u] = 0 and E[x^2] > 0. That algebra can be granted.
+
+  It does not imply that increasing x by one causes every individual's y
+  to rise by β. E[x u] = 0 is the defining property of the projection
+  residual, which can hold while u contains omitted causes correlated
+  with x in a structural model—unless those have already been assumed
+  away. Heterogeneous causal effects would make a single β at best an
+  average weighted by Var(x) in a linear CEF, not an individual effect.
+
+  Replace the last sentence with a projection statement, or add an
+  explicit causal model (RCT, CIA, IV) that identifies the object the
+  sentence names.
+
+  Limitation: if the prompt had specified a linear causal model with
+  independent assignment of x, the last sentence could be right; it did
+  not.
+evaluator_notes: |
+  Technically correct algebra, semantically wrong causal claim. Do not
+  fail the formula.
+assumptions:
+  - Scalar OLS/projection algebra as written.
+  - No randomization of x is provided.
+validation_steps:
+  - Grant β = E[x^2]^{-1} E[x y].
+  - Strike "causes… for every individual."
+  - Require a design for causal language.

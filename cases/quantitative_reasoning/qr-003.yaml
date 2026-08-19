@@ -1,0 +1,50 @@
+id: QR-003
+domain: quantitative_reasoning
+title: Perpetuity value via the wrong formula then a cancelled coupon
+prompt: |
+  A perpetuity pays 50 at the end of every year, first payment one year
+  from today. The annual discount rate is 5 percent. What is its present
+  value? Show a formula.
+candidate_response: |
+  The beginning-of-period perpetuity formula is C(1 + r)/r = 50 × 1.05 /
+  0.05 = 1,050. A payment is not due today, so I subtract one coupon:
+  1,050 − 50 = 1,000. Present value is 1,000.
+verdict: correct_result_invalid_reasoning
+error_classification:
+  - correct result with invalid reasoning
+severity: MAJOR
+earliest_failure_point: mathematical correctness
+explanation: |
+  The correct PV of an ordinary perpetuity is C/r = 50/0.05 = 1,000.
+  The candidate used the due-perpetuity formula and then subtracted a
+  coupon, which algebraically returns C/r. The result is right; the
+  argument would mis-value a different timing convention. Known fixture
+  MAJOR.
+corrected_reasoning: |
+  Ordinary perpetuity (first cash flow in one year): PV = C/r = 1,000.
+  The due formula C(1+r)/r is for a payment due immediately; it is not
+  the starting point here.
+golden_response: |
+  With the first payment one year from today, the present value is the
+  ordinary perpetuity
+  PV = 50 / 0.05 = 1,000.
+  Equivalently, PV = 50/(1.05) + 50/(1.05)^2 + ⋯ = (50/1.05) / (1 − 1/1.05)
+  = 1,000.
+
+  A perpetuity due, with a payment today, is worth C + C/r = C(1+r)/r =
+  1,050. Subtracting 50 from 1,050 happens to recover 1,000, but that
+  path starts from the wrong timing and corrects it by hand. If the
+  first payment were in two years, the same habit would not land on the
+  right number without a further undocumented patch.
+
+  Limitation: constant r and default-free payments are assumed as in the
+  prompt.
+evaluator_notes: |
+  Known fixture QR-003. Verdict is correct_result_invalid_reasoning, not
+  pass.
+assumptions:
+  - First cash flow in one year; constant annual rate 5 percent.
+validation_steps:
+  - Confirm PV = 1,000.
+  - Note that C(1+r)/r was the wrong starting formula.
+  - Treat cancelled-coupon reasoning as invalid.
