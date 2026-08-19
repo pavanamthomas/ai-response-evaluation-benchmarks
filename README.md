@@ -1,5 +1,7 @@
 # AI Response Evaluation Benchmarks
 
+[![CI](https://github.com/pavanamthomas/ai-response-evaluation-benchmarks/actions/workflows/ci.yml/badge.svg)](https://github.com/pavanamthomas/ai-response-evaluation-benchmarks/actions)
+
 Benchmark cases for evaluating economics, econometrics, statistics, mathematics, and quantitative AI responses.
 
 This repository is a **scoring laboratory**: each item is a prompt, a candidate answer, and an expert review. The subject matter is the evaluation of quantitative reasoning. The golden responses are written as an economist and econometrician would write an accepted examination solution. They are not transcripts of a commercial chatbot.
