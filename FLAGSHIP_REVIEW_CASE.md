@@ -183,4 +183,4 @@ Mean of these scores would be misleadingly middling. Severity is **CRITICAL** be
 
 ## Closing examiner sentence
 
-A recruiter-grade answer in this area is not the one that can write \(\alpha_s+\lambda_t+\beta D_{st}\). It is the one that can say, without hedging theater, that this \(\hat\beta\) is not an ATT, that the pre-trends and placebo already contradict the design, and that a labor department should not move a program on that number.
+A competent review in this area is not the one that can write \(\alpha_s+\lambda_t+\beta D_{st}\). It is the one that can say that this \(\hat\beta\) is not an ATT, that the pre-trends and placebo already contradict the design, and that a labor department should not move a program on that number.

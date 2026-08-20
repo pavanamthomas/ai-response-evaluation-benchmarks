@@ -15,10 +15,15 @@ Candidate answers are constructed to fail in named ways. A `PASS` verdict is not
 
 Details: `docs/failures_and_corrections.md` and `docs/defect_taxonomy.md`.
 
-## Open (issues)
+## Remaining bounds
+
+Issues #1–#4 were closed after mixed-verdict tests, documented corpus
+construction, zero-on-causal-validity failure, and Cohen's kappa arithmetic
+on known tables. What remains unimplemented:
 
 1. Cases remain constructed failure modes, not production traffic.
-2. Cohen's kappa is implemented as arithmetic on label vectors, not as a second-rater study of the YAML corpus.
+2. Cohen's kappa is implemented as arithmetic on label vectors, not as a second-rater study of the YAML corpus
+   ([issue #5](https://github.com/pavanamthomas/ai-response-evaluation-benchmarks/issues/5)).
 
 ## Explicitly not in scope
 

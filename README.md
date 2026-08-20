@@ -23,11 +23,10 @@ Typical setting: an expert-review or evaluation role in which fluency is cheap a
 
 ## Methodology
 
-Every golden response, and every fair candidate review, should be reconstructible as:
-
-**Problem → formalization → assumptions → computation or estimation → validation → interpretation → limitations**
-
-That sequence is the backbone of `GOLDEN_RESPONSE_STANDARD.md`. Skipping “validation” is how invalid IV, leaked features, and infeasible optima survive.
+Every golden response, and every fair candidate review, should name the
+target object, the assumptions, the calculation or estimator, a check, and
+the interpretation limit. That is the backbone of `GOLDEN_RESPONSE_STANDARD.md`.
+Skipping the check is how invalid IV, leaked features, and infeasible optima survive.
 
 ## How judgement is recorded
 
