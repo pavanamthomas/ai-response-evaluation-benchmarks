@@ -1,6 +1,6 @@
 # Flagship review case: staggered grants, two-way fixed effects, and a causal policy claim
 
-**Audience.** Examiner or hiring reviewer assessing whether a candidate can audit a modern difference-in-differences design, not merely recite the two-by-two formula.
+**Setting.** A review of a candidate write-up of a modern difference-in-differences design, not a recitation of the two-by-two formula.
 
 **Domain mix.** Public economics, panel econometrics, treatment-effect heterogeneity, and policy interpretation.
 

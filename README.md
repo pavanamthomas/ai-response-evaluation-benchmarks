@@ -11,7 +11,7 @@ This repository is a **scoring laboratory**: each item is a prompt, a candidate 
 
 ## What this is for
 
-Use the cases to train or audit reviewers who must judge answers in:
+Use the cases to score candidate answers in:
 
 - economics and public policy
 - econometrics and causal inference
@@ -19,7 +19,7 @@ Use the cases to train or audit reviewers who must judge answers in:
 - mathematics at the level expected of a mathematically trained economist
 - quantitative reasoning (units, compounding, ambiguous averages)
 
-Typical setting: an expert-review or evaluation role in which fluency is cheap and **identification, evidence discipline, and correct objects** are not.
+Fluent prose is cheap in this corpus. Identification, evidence discipline, and the correct object of inference are not.
 
 ## Methodology
 
