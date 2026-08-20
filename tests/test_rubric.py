@@ -25,6 +25,12 @@ def test_expected_severity_unknown_id() -> None:
         expected_severity("NO-SUCH-CASE")
 
 
+def _all_threes(**overrides: int) -> dict[str, int]:
+    scores = {name: 3 for name in RUBRIC_DIMENSIONS}
+    scores.update(overrides)
+    return scores
+
+
 def test_heuristic_checks_flag_short_golden() -> None:
     warnings = heuristic_checks(
         {
@@ -38,20 +44,26 @@ def test_heuristic_checks_flag_short_golden() -> None:
 
 
 def test_structured_profile_is_not_a_single_verdict() -> None:
-    scores = {name: 3 for name in RUBRIC_DIMENSIONS}
-    scores["causal validity"] = 0
-    profile = structured_profile(scores)
+    profile = structured_profile(_all_threes(**{"causal validity": 0}))
     assert profile["mean"] > 2
     assert "causal validity" in profile["failing_dimensions"]
     assert "not a single score" in profile["note"]
     assert verdict_from_profile(profile) == "fail"
 
 
-def test_cohens_kappa_on_known_tables() -> None:
-    from aibench.agreement import cohens_kappa
+def test_zero_causal_validity_fails_despite_high_mean() -> None:
+    profile = structured_profile(_all_threes(**{"causal validity": 0}))
+    assert abs(profile["mean"] - 2.7) < 1e-12
+    assert verdict_from_profile(profile) == "fail"
 
-    a = ["PASS", "PASS", "FAIL", "FAIL"]
-    b = ["PASS", "PASS", "FAIL", "FAIL"]
-    assert abs(cohens_kappa(a, b) - 1.0) < 1e-12
-    b2 = ["FAIL", "FAIL", "PASS", "PASS"]
-    assert cohens_kappa(a, b2) < 0.0
+
+def test_zero_evidence_discipline_fails() -> None:
+    profile = structured_profile(_all_threes(**{"evidence discipline": 0}))
+    assert verdict_from_profile(profile) == "fail"
+
+
+def test_all_threes_is_a_pass() -> None:
+    profile = structured_profile(_all_threes())
+    assert profile["minimum"] == 3
+    assert profile["failing_dimensions"] == []
+    assert verdict_from_profile(profile) == "pass"

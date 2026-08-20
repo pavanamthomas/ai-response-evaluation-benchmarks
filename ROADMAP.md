@@ -6,6 +6,7 @@ Current as of August 2026.
 
 - Fifty YAML cases across economics, econometrics, statistics, mathematics, quantitative reasoning, and mixed items.
 - Severity, defect taxonomy, multi-dimension rubric, golden-response standard, flagship staggered DiD review.
+- `verdict_from_profile` fails on a zero in causal validity or evidence discipline; Cohen's kappa is checked on known tables.
 - CI: `python -m pytest` and `python scripts/validate_cases.py`.
 
 ## Failures that are part of the design

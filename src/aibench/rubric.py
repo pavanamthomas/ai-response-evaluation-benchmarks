@@ -114,11 +114,11 @@ def verdict_from_profile(profile: Mapping[str, Any]) -> str:
     """Map a rubric profile to pass/fail without using the mean as the rule.
 
     A zero on causal validity or evidence discipline is a fail even when
-    the mean is high.
+    the mean is high. Any other dimension scored 0 is also a fail.
     """
     failing = set(profile.get("failing_dimensions") or [])
     if "causal validity" in failing or "evidence discipline" in failing:
         return "fail"
-    if int(profile.get("minimum", 0)) == 0:
+    if int(profile["minimum"]) == 0:
         return "fail"
     return "pass"
