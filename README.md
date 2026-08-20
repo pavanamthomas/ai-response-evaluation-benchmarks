@@ -43,6 +43,10 @@ Reviews **do not** collapse to a single score as the only output.
 
 A high mean with a zero on causal validity is still a fail. See the flagship staggered difference-in-differences review.
 
+## Who coded the labels
+
+One author wrote the YAML reviews. Cohen's kappa is checked on known tables; it is not double-coding of the corpus. There is no second independent rater. Details: [`docs/label_authorship.md`](docs/label_authorship.md) and [issue #5](https://github.com/pavanamthomas/ai-response-evaluation-benchmarks/issues/5).
+
 ## Repository layout
 
 ```text
@@ -51,6 +55,7 @@ GOLDEN_RESPONSE_STANDARD.md
 FLAGSHIP_REVIEW_CASE.md
 docs/severity.md
 docs/defect_taxonomy.md
+docs/label_authorship.md
 cases/economics/
 cases/econometrics/
 cases/statistics/

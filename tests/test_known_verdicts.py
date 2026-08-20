@@ -43,6 +43,15 @@ def test_flagship_file_exists_and_is_nontrivial() -> None:
         assert token in lowered
 
 
+def test_label_authorship_states_one_coder_and_no_second_rater() -> None:
+    path = repository_root() / "docs" / "label_authorship.md"
+    assert path.is_file()
+    text = path.read_text(encoding="utf-8").lower()
+    assert "one author" in text
+    assert "not a second-rater" in text
+    assert "none will be invented" in text
+
+
 def test_verdicts_are_not_uniform() -> None:
     cases = load_cases()
     verdicts = {case["verdict"] for case in cases}
