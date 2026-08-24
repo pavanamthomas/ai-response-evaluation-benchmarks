@@ -40,6 +40,8 @@ The first cases focus on relational grain and information-set integrity:
 
 The second example is another `correct_result_invalid_reasoning` case: accidental numerical agreement does not validate the query.
 
+Issue #6 requested these domains. The YAML files, schema, and tests on `main` are the implementation; remaining work is additional distinct failure modes, not the existence of the folders.
+
 ## Boundaries
 
 This extension does not claim exhaustive ML, GenAI, Python, or SQL coverage. It does not represent production traffic, a second-rater study, or a benchmark of commercial systems. New cases should be added only when they introduce a distinct technical failure mode or a materially different validation argument; case count by itself is not a quality target.
