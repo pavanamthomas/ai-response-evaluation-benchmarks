@@ -1,6 +1,6 @@
 # Roadmap
 
-Current as of August 2026.
+Rater, domain, and scoring limits of the frozen YAML corpus (August 2026).
 
 ## In scope now
 

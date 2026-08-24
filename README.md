@@ -4,10 +4,10 @@
 
 Structured review cases for economics, econometrics, statistics, mathematics, machine learning, GenAI/RAG, Python computation, SQL reasoning, and quantitative AI answers.
 
-This repository is a scoring laboratory: each item is a prompt, a candidate answer, and an explicit review. The object is not writing style. It is whether the response identified the right target, respected the information set and assumptions, used a valid method, survived a check, and limited its conclusion to what the evidence supports.
+Each item is a prompt, a candidate answer, and an explicit review. The object is not writing style. It is whether the response identified the right target, respected the information set and assumptions, used a valid method, survived a check, and limited its conclusion to what the evidence supports.
 
-**Author:** Dr. Pavanam Thomas ([GitHub](https://github.com/pavanamthomas), thomaspavanam@gmail.com)  
-**License:** MIT. Copyright 2026 Dr. Pavanam Thomas.
+Dr. Pavanam Thomas · [pavanamthomas](https://github.com/pavanamthomas) · thomaspavanam@gmail.com  
+MIT License · Copyright 2026
 
 The golden responses are reference reviews, not transcripts of a commercial chatbot. One author coded the YAML corpus; there is no claimed second-rater study.
 

@@ -1,12 +1,12 @@
 ---
-name: Validation gap
-about: A property that should be checked, or a check that is too weak
-title: "[validation] "
+name: Rubric gap
+about: A case or scorer dimension that would still pass a fluent wrong answer
+title: "[check] "
 labels: ["validation"]
 ---
 
 ## Claim that is insufficiently checked
 
-## DGP or identity that would expose the gap
+## Prompt / candidate pair that would expose the gap
 
-## Proposed check
+## Proposed YAML case or scorer test

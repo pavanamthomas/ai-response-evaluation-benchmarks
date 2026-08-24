@@ -1,14 +1,14 @@
 ---
-name: Limitation
-about: Record a bound on what this laboratory identifies or computes
-title: "[limitation] "
+name: Corpus bound
+about: A rater, domain, or scoring claim this YAML set does not support
+title: "[bound] "
 labels: ["limitation"]
 ---
 
-## What is limited
+## Evaluation claim that is out of reach
 
-## Why this is a bound rather than a bug
+## Domain and intended failure
 
-## What would be required to go further
+## Why single-author labels matter here
 
-## Related tests or notes
+## What a fluent golden response does not license

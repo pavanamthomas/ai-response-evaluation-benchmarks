@@ -1,12 +1,7 @@
-# Laboratory process
+# How this lab records work
 
-Work is recorded in this order:
+Evaluation claims here are claims about a labelled corpus and a rubric, not about a production LLM. Write the domain, the intended failure (wrong target, leaked information, invalid method, unbounded interpretation), and whether the label is single-author before changing YAML or the scorer.
 
-1. A failure, limitation, or identification question is written down (GitHub issue and, when it is part of the teaching design, `docs/failures_and_corrections.md`).
-2. If the claim is numerical, a test is added that would fail if the claim were reversed.
-3. Code or documentation changes in a commit that states the reason, not the file list.
-4. CI on `main` must pass. Passing CI means the laboratory still runs under the documented commands. It is not evidence about an observational study.
+If the claim is numerical, add a test that would fail if a fluent wrong answer scored as correct. CI on `main` means pytest still passes on the frozen YAML. It is not a second-rater study and not a leaderboard.
 
-The public queue is GitHub Issues. The bound on that queue is `ROADMAP.md`.
-
-Do not treat a green badge as a correction. A correction is a change in estimator, specification, or interpretation, locked by a test or by an explicit limitation statement.
+Issues are the public queue. `ROADMAP.md` is the bound. A green badge is not inter-rater reliability.

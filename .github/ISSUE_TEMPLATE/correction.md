@@ -1,14 +1,14 @@
 ---
-name: Correction
-about: A documented failure and the correction that follows from it
+name: Label correction
+about: A scored answer that should fail earlier, or a rubric dimension that moved the wrong way
 title: "[correction] "
 labels: ["correction"]
 ---
 
-## What failed
+## What the candidate got wrong (target, information set, method, interpretation)
 
-## Diagnostic or counterexample
+## Earliest failure that should have fired
 
-## Correction (estimator, specification, or interpretation)
+## Correction to YAML or scorer
 
-## What remains unknown
+## What remains a single-author judgement

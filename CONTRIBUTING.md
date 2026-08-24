@@ -1,12 +1,10 @@
-# Working on this laboratory
+# Contributing to the evaluation corpus
 
-This is a personal research repository. The useful unit of work is a limitation, a failed specification, or a tighter check.
+Useful work is a case where fluency and validity split, a rubric dimension that actually moves, or a domain extension that does not pretend to be multi-rater.
 
-1. Open or update a GitHub issue. Name the estimand, the DGP, and the mismatch.
-2. If the claim is numerical, add a test that fails on `main` before the change and passes after.
-3. Keep commits narrow. Do not bundle formatting with a scientific change.
-4. Comment invariants and failure risks, not obvious syntax.
+1. Open an issue naming the domain, the intended failure, and the label source.
+2. Add a failing test before changing scoring behaviour.
+3. Keep commits to one case or one scorer change.
+4. Comment the intended failure and the single-author limit, not obvious YAML keys.
 
-Recorded failures: `docs/failures_and_corrections.md`.  
-Queue and bounds: `ROADMAP.md` and GitHub Issues.  
-Checks: `python -m pytest` and `.github/workflows/ci.yml`.
+See `FLAGSHIP_REVIEW_CASE.md`, `docs/ml_genai_sql_extension.md`, `ROADMAP.md`, and `.github/workflows/ci.yml`.
