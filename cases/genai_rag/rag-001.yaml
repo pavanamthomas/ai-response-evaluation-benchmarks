@@ -1,0 +1,41 @@
+id: RAG-001
+domain: genai_rag
+title: Gold retrieved but removed by the context budget
+prompt: |
+  A retriever returns the gold passage at rank 2. The context packer keeps only
+  rank 1 because of a strict token budget, and the generator then answers from
+  rank 1. A reviewer labels the error as a retrieval failure because the final
+  answer is wrong. Is that failure attribution correct?
+candidate_response: |
+  Yes. Since the final answer is wrong, retrieval failed. The correct passage
+  did not influence the answer, so the retriever should be blamed.
+verdict: fail
+error_classification:
+  - failure attribution
+severity: MAJOR
+earliest_failure_point: conceptual correctness
+explanation: |
+  Retrieval did place the gold evidence inside the requested top-k result. The
+  first stage that discarded required evidence was context construction. Calling
+  every downstream wrong answer a retrieval failure prevents useful diagnosis.
+corrected_reasoning: |
+  Trace evidence stage by stage. Retrieval succeeded at the stated top-k because
+  gold was rank 2. The context packer then removed it under the token budget, so
+  the earliest substantive failure is context construction. Generator behavior
+  should be evaluated only against the context it actually received.
+golden_response: |
+  I would classify the earliest failure as context packing, not retrieval. The
+  retriever returned the gold passage at rank 2, so retrieval at that k did not
+  miss the evidence. The packer then dropped rank 2 before generation. I would
+  record the ranking metric separately, inspect the packing policy, and avoid
+  collapsing retrieval, context, and generation into one error label.
+evaluator_notes: |
+  The case tests stage-local failure attribution rather than whether the final
+  answer is correct.
+assumptions:
+  - The evaluation defines retrieval success at a k that includes rank 2.
+  - The generator never saw the rank-2 passage.
+validation_steps:
+  - Verify the gold passage is present in retrieved ids.
+  - Verify it is absent from packed context.
+  - Attribute the earliest evidence loss to context construction.

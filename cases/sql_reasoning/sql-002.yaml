@@ -1,0 +1,46 @@
+id: SQL-002
+domain: sql_reasoning
+title: Correct toy value produced by a future-looking LEAD feature
+prompt: |
+  At a prediction cutoff of January 10, a query uses LEAD(transaction_amount)
+  over each customer's transactions to create `next_amount`. In the supplied
+  toy row, the next transaction happens on January 9, so the reported feature
+  value happens to equal the intended historical feature value. The candidate
+  says the query is therefore point-in-time safe. Evaluate the reasoning.
+candidate_response: |
+  The feature value is correct for the example, so the LEAD expression is safe.
+  Window functions only read rows in the customer's partition and do not leak
+  labels from the future.
+verdict: correct_result_invalid_reasoning
+error_classification:
+  - correct result with invalid reasoning
+  - temporal leakage
+severity: CRITICAL
+earliest_failure_point: conceptual correctness
+explanation: |
+  Agreement on one toy row does not establish information-set correctness.
+  LEAD is defined by row ordering, not by the prediction cutoff. On another row
+  it can expose a transaction after January 10. The current numerical match is
+  accidental.
+corrected_reasoning: |
+  Define the prediction-time information set first. Filter eligible event rows
+  to timestamps at or before the cutoff before constructing historical window
+  features, or use explicitly backward-looking frames. Plant a post-cutoff
+  sentinel and require that it cannot affect the feature table.
+golden_response: |
+  I would reject the claim even though the toy value happens to be numerically
+  correct. Point-in-time safety is a property of the query over the allowed
+  information set, not of one output value. `LEAD` can return a row after the
+  cutoff unless the eligible relation has already been time-filtered. I would
+  enforce the cutoff before the window operation and add a future-only sentinel
+  test so a later transaction cannot change any historical feature.
+evaluator_notes: |
+  Designed correct-result/invalid-reasoning case. The evaluator should not give
+  full credit for accidental numerical agreement.
+assumptions:
+  - Transactions exist both before and after some prediction cutoffs.
+  - The model feature must use information available no later than the cutoff.
+validation_steps:
+  - Add a known post-cutoff transaction and rerun the query.
+  - Verify that the correct feature table is unchanged.
+  - Inspect the window input relation, not only the final numerical value.

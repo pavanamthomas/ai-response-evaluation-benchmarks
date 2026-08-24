@@ -1,0 +1,46 @@
+id: ML-001
+domain: machine_learning
+title: Supervised feature selection performed before the split
+prompt: |
+  A binary classifier has 2,000 candidate predictors and 600 observations.
+  The analyst runs SelectKBest using all 600 labels, keeps 30 predictors,
+  then makes an 80/20 train-test split. The held-out ROC-AUC is 0.86.
+  Is 0.86 a valid estimate of generalization performance? Explain the first
+  methodological failure and how to repair it.
+candidate_response: |
+  Yes. The test rows were never used to fit the classifier, so the 0.86 AUC is
+  an unbiased holdout estimate. Feature selection happened before model fitting
+  and therefore does not count as leakage.
+verdict: fail
+error_classification:
+  - leakage
+severity: CRITICAL
+earliest_failure_point: statistical correctness
+explanation: |
+  The labels of the eventual test rows influenced which 30 predictors survived
+  SelectKBest. The evaluation set therefore affected the fitted procedure before
+  the classifier itself was trained. The earliest failure is the resampling
+  boundary, not the classifier algorithm.
+corrected_reasoning: |
+  Split first. Fit supervised feature selection only on the training data, and
+  if hyperparameters or the number of selected features are tuned, place the
+  selector inside a Pipeline and perform that choice inside the training-side
+  cross-validation loop. Touch the final test set only once after selection.
+golden_response: |
+  I would not accept 0.86 as a clean holdout estimate. SelectKBest used every
+  label, including labels that later became test observations, so the test set
+  influenced the feature space. I would put the selector and classifier in one
+  Pipeline, fit and tune that pipeline only on training folds, and evaluate once
+  on an untouched test set. If model selection is extensive, I would use nested
+  cross-validation or a separate final holdout to evaluate the full selection
+  procedure.
+evaluator_notes: |
+  The key is to identify supervised preprocessing as part of model fitting.
+  Saying that only classifier.fit matters is the designed error.
+assumptions:
+  - SelectKBest uses the outcome labels.
+  - The reported test split was created after feature selection.
+validation_steps:
+  - Check whether test labels entered the feature-selection statistic.
+  - Require feature selection to occur inside the training resampling path.
+  - Do not interpret the reported 0.86 as untouched holdout performance.

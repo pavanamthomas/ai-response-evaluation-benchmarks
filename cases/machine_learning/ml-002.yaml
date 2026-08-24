@@ -1,0 +1,46 @@
+id: ML-002
+domain: machine_learning
+title: Strong ranking mistaken for calibrated probabilities
+prompt: |
+  Model A has ROC-AUC 0.91 and a Brier score of 0.22. Model B has ROC-AUC
+  0.88 and a Brier score of 0.12 on the same untouched test set. A reviewer
+  says Model A is better because its AUC is higher and therefore its predicted
+  probabilities are more accurate. Evaluate that conclusion.
+candidate_response: |
+  The AUC comparison is correct: Model A ranks positives above negatives more
+  often. Because 0.91 exceeds 0.88, Model A also has the more accurate risk
+  probabilities, so it is the better probability model.
+verdict: correct_result_invalid_reasoning
+error_classification:
+  - correct result with invalid reasoning
+  - calibration error
+severity: MAJOR
+earliest_failure_point: statistical correctness
+explanation: |
+  The ranking statement about AUC is acceptable, but the candidate then uses a
+  ranking metric to justify probability accuracy. The lower Brier score for
+  Model B is direct evidence against that inference. AUC is largely insensitive
+  to monotone recalibration that preserves ordering.
+corrected_reasoning: |
+  Separate discrimination from probability quality. AUC evaluates ranking;
+  Brier score evaluates squared probability error. If the operational target is
+  calibrated risk, inspect calibration curves or calibration error as well as a
+  proper scoring rule. If ranking is the target, AUC may still favor Model A.
+golden_response: |
+  I would separate two claims. Model A has better ranking discrimination on this
+  test set because its ROC-AUC is higher. That does not imply better probability
+  estimates. Model B's substantially lower Brier score indicates better squared
+  probability accuracy on the same observations. Which model is preferable
+  depends on the decision target, and I would inspect calibration explicitly
+  before using either model as a risk estimator.
+evaluator_notes: |
+  Preserve the correct AUC interpretation but reject the probability-quality
+  conclusion. This is intentionally a correct partial result with invalid
+  downstream reasoning.
+assumptions:
+  - Both metrics are computed on the same untouched test observations.
+  - Lower Brier score is better.
+validation_steps:
+  - Separate ranking discrimination from calibration/probability error.
+  - Verify that a monotone transform can preserve AUC while changing calibration.
+  - Use the Brier comparison only for the stated test distribution.
