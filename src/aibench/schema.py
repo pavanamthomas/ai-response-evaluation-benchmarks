@@ -34,6 +34,10 @@ VALID_DOMAINS: frozenset[str] = frozenset(
         "mathematics",
         "quantitative_reasoning",
         "mixed",
+        "machine_learning",
+        "genai_rag",
+        "python_computation",
+        "sql_reasoning",
     }
 )
 
@@ -88,15 +92,7 @@ def _as_text(value: Any) -> str:
 
 
 def validate_case(data: Mapping[str, Any], *, source: str = "") -> dict[str, Any]:
-    """Validate one case mapping and return a normalized copy.
-
-    Parameters
-    ----------
-    data:
-        Parsed YAML mapping.
-    source:
-        Optional path or label included in error messages.
-    """
+    """Validate one case mapping and return a normalized copy."""
     prefix = f"{source}: " if source else ""
     if not isinstance(data, Mapping):
         raise CaseValidationError(f"{prefix}case must be a mapping")

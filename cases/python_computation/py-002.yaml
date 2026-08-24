@@ -1,0 +1,43 @@
+id: PY-002
+domain: python_computation
+title: Exact equality imposed on Monte Carlo coverage
+prompt: |
+  A simulation with 2,000 replications evaluates nominal 95 percent confidence
+  interval coverage. The observed coverage is 0.944. A candidate test asserts
+  `coverage == 0.95` and declares the implementation wrong because the equality
+  fails. Evaluate the test design.
+candidate_response: |
+  The test is correct. With a fixed random seed the simulation is reproducible,
+  so a correct 95 percent interval procedure must produce exactly 0.95 coverage.
+verdict: fail
+error_classification:
+  - probability error
+  - stochastic tolerance error
+severity: MAJOR
+earliest_failure_point: statistical correctness
+explanation: |
+  A fixed seed makes one Monte Carlo draw repeatable; it does not eliminate
+  simulation error. Coverage is an empirical proportion with binomial Monte
+  Carlo variability. Exact equality to the nominal probability is not the
+  statistical target.
+corrected_reasoning: |
+  Under true coverage near 0.95 and 2,000 replications, the Monte Carlo standard
+  error is approximately the square root of 0.95 times 0.05 divided by 2,000,
+  about 0.0049. An observed 0.944 is roughly 1.2 Monte Carlo standard errors
+  below 0.95 and is not evidence of a broken interval procedure by itself.
+golden_response: |
+  I would reject exact equality as the test oracle. The seed guarantees
+  reproducibility of the experiment, not zero Monte Carlo error. I would compare
+  observed coverage with a tolerance justified by its Monte Carlo standard
+  error, and I would also test deterministic invariants of the interval code.
+  Here 0.944 is well within ordinary simulation variation around 0.95 for 2,000
+  replications.
+evaluator_notes: |
+  Require a statistical tolerance argument rather than an arbitrary epsilon.
+assumptions:
+  - Replications are independent for the coverage indicator.
+  - True coverage is close enough to 0.95 for the standard-error calculation.
+validation_steps:
+  - Compute the Monte Carlo standard error for a Bernoulli coverage indicator.
+  - Compare the observed deviation with that uncertainty.
+  - Separate deterministic reproducibility from stochastic ground truth.

@@ -1,0 +1,44 @@
+id: PY-001
+domain: python_computation
+title: Naive log-sum-exp overflows on valid inputs
+prompt: |
+  Evaluate this implementation for x = [1000.0, 999.0]:
+
+      np.log(np.sum(np.exp(x)))
+
+  The mathematical quantity is finite. Is the implementation numerically
+  reliable, and what should replace it?
+candidate_response: |
+  Yes. NumPy uses floating point but the formula is mathematically exact, so the
+  result is the correct log-sum-exp up to ordinary rounding error.
+verdict: fail
+error_classification:
+  - numerical instability
+severity: MAJOR
+earliest_failure_point: mathematical correctness
+explanation: |
+  Exponentiating 1000 in float64 overflows before the logarithm can recover the
+  scale. This is not ordinary small rounding error; the intermediate operation
+  can become infinity even though the target quantity is finite.
+corrected_reasoning: |
+  Subtract the maximum before exponentiation: let m be max(x), compute
+  m + log(sum(exp(x - m))). The transformation is algebraically identical but
+  keeps exponentials near one. A trusted implementation such as
+  scipy.special.logsumexp can serve as an independent check.
+golden_response: |
+  I would reject the naive implementation for large logits. The finite target is
+  lost because exponentiation overflows first. I would subtract the maximum,
+  compute the exponentials of the shifted values, take their log-sum, and add the
+  maximum back. I would test the implementation against SciPy on ordinary cases
+  and include an extreme-value fixture like 1000 and 999 that the naive path
+  must fail.
+evaluator_notes: |
+  The designed error is confusing algebraic correctness with floating-point
+  stability.
+assumptions:
+  - Standard IEEE-style float64 arithmetic.
+  - The input may contain large finite values.
+validation_steps:
+  - Demonstrate overflow in the naive intermediate exponential.
+  - Verify max-subtraction gives a finite result.
+  - Compare against an independent stable implementation.

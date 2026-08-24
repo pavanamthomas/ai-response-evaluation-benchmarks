@@ -1,0 +1,45 @@
+id: SQL-001
+domain: sql_reasoning
+title: Many-to-many join silently multiplies training rows
+prompt: |
+  A customer table has one row per customer. `transactions` has many rows per
+  customer and `support_tickets` also has many rows per customer. An analyst
+  joins customers to both tables on customer_id and then sums transaction
+  amount. The total spend is inflated. Identify the first structural error and
+  give a defensible repair.
+candidate_response: |
+  The transaction table must contain duplicate rows. I would add DISTINCT to the
+  final SELECT so each output row is unique, then recompute the sum.
+verdict: fail
+error_classification:
+  - join cardinality error
+severity: CRITICAL
+earliest_failure_point: conceptual correctness
+explanation: |
+  The problem can occur with no duplicate source rows. Joining two one-to-many
+  relations at customer grain creates a many-to-many multiplication: each
+  transaction is paired with each ticket for the same customer. DISTINCT after
+  aggregation does not restore the intended transaction multiplicity.
+corrected_reasoning: |
+  State the grain of every input and target first. Aggregate transactions to the
+  desired customer grain and tickets separately, then join the aggregated
+  relations to customers; alternatively use semijoins or separate feature CTEs
+  when only existence/counts are needed. Validate expected row counts and key
+  uniqueness after each stage.
+golden_response: |
+  I would first check join cardinality, not assume duplicate source rows. Two
+  independent one-to-many joins on customer_id create a many-to-many product at
+  the joined row level, so transaction amounts are repeated once per matching
+  ticket. I would aggregate each event table to the target customer grain before
+  joining them and assert uniqueness of customer_id in those feature tables.
+  `DISTINCT` is not a principled repair because it changes rows after the
+  multiplicity error has already affected the sum.
+evaluator_notes: |
+  This case tests relational grain and cardinality rather than syntax recall.
+assumptions:
+  - Source transaction and ticket rows are individually unique.
+  - The intended output grain is one row per customer.
+validation_steps:
+  - Check uniqueness and row counts at each join input.
+  - Demonstrate transaction-ticket cross multiplication for a customer with two of each.
+  - Verify pre-aggregation restores one row per customer before the final join.
