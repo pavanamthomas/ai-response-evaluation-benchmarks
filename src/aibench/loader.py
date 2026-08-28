@@ -16,10 +16,10 @@ class CaseLoadError(ValueError):
 
 def repository_root(start: Path | None = None) -> Path:
     """Return the repository root (directory containing ``pyproject.toml``)."""
-    cursor = (start or Path(__file__)).resolve()
-    if cursor.is_file():
-        cursor = cursor.parent
-    for candidate in (cursor, *cursor.parents):
+    anchor = (start or Path(__file__)).resolve()
+    if anchor.is_file():
+        anchor = anchor.parent
+    for candidate in (anchor, *anchor.parents):
         if (candidate / "pyproject.toml").is_file() and (candidate / "cases").is_dir():
             return candidate
     raise CaseLoadError("could not locate repository root with pyproject.toml and cases/")
