@@ -20,11 +20,6 @@ env/
 .env.*
 
 # Local editor directories
-.cursor/
-.cursorignore
-.claude/
-.codex/
-.aider*
 .idea/
 .vscode/
 *.swp
